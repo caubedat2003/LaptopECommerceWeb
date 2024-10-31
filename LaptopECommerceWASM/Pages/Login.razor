@@ -1,0 +1,111 @@
+﻿@page "/login"
+
+@using LaptopECommerce.Models;
+@using LaptopECommerceWASM.Services;
+@inject NavigationManager NavigationManager;
+@inject IAuthService AuthService;
+@inject IJSRuntime JSRuntime
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger">
+        <p>@Error</p>
+    </div>
+}
+<div class="page-body-center">
+    <div class="cardLogin">
+        <div class="login-title">
+            <h3 class="m-1"><i class="ri-login-box-line"></i></h3>
+            <h3 class="card-title m-1">Đăng nhập</h3>
+        </div>
+        <hr class="m-3"/>
+
+        <div class="card-body p-2">
+            <div class="user-picture">
+                <img src="/user.png" class="img-fluid" width="150" alt="User Logo" />
+            </div>
+
+            <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator></DataAnnotationsValidator>
+
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <div class="input-username">
+                            <i class="ri-user-3-fill mt-2"></i>
+                            <InputText id="username" class="form-control" placeholder="Username" @bind-Value="LoginModel.UserName"></InputText>
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> LoginModel.UserName"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <div class="input-password">
+                            <i class="ri-lock-fill mt-2"></i>
+                            <div class="input-group">
+                                <input id="password" type="password" class="form-control" @ref="passwordInput"
+                                       placeholder="Password" @bind-value="LoginModel.Password" />
+                                <button class="btn btn-outline-secondary" type="button" @onclick="TogglePasswordVisibility">
+                                    <i class="ri-eye-line" id="passwordIcon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> LoginModel.Password"></ValidationMessage>
+                        </div>
+                    </div>
+                </div >
+
+                <div class="row mb-3">
+                    <div class="col-sm-10 forgot-password">
+                        <p><a class="link-opacity-50-hoveratio" href="#">Quên mật khẩu</a></p>
+                    </div>
+                </div>
+
+                <div class="button-center">
+                    <button type="submit" class="btn login-btn">Login</button>
+                </div>
+            </EditForm>
+        </div>
+        <hr class="m-3"/>
+        <div>
+            <div class="link-register">
+                Chưa có tài khoản <a href="/register">Đăng kí</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private LoginRequest LoginModel = new LoginRequest();
+    private bool ShowErrors;
+    private string Error = "";
+    private ElementReference passwordInput;
+    private bool isPasswordVisible = false;
+
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+
+        var result = await AuthService.Login(LoginModel);
+        if (result.Successful)
+        {
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            ShowErrors = true;
+            Error = result.Error;
+        }
+    }
+
+    private async Task TogglePasswordVisibility()
+    {
+        isPasswordVisible = !isPasswordVisible;
+        var newType = isPasswordVisible ? "text" : "password";
+        await JSRuntime.InvokeVoidAsync("togglePasswordVisibility", passwordInput, newType);
+    }
+}

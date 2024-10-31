@@ -17,7 +17,10 @@ namespace LaptopECommerce.Api.Data
                     LastName = "Mr",
                     Email = "admin@gmail.com",
                     PhoneNumber = "0123456789",
-                    UserName = "admin"
+                    UserName = "admin",
+                    NormalizedEmail = "ADMIN@GMAIL.COM",
+                    NormalizedUserName = "ADMIN",
+                    SecurityStamp = Guid.NewGuid().ToString()
                 };
                 user.PasswordHash = _passwordHasher.HashPassword(user, "Admin123@");
                 context.Users.Add(user);

@@ -30,6 +30,21 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <!--show/hide password-->
+    <script>
+        window.togglePasswordVisibility = (passwordInput, type) => {
+            passwordInput.setAttribute('type', type);
+            const icon = document.getElementById('passwordIcon');
+            if (type === 'text') {
+                icon.classList.remove('ri-eye-line');
+                icon.classList.add('ri-eye-off-line');
+            } else {
+                icon.classList.remove('ri-eye-off-line');
+                icon.classList.add('ri-eye-line');
+            }
+        };
+    </script>
 </body>
 
 </html>

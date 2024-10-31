@@ -101,3 +101,39 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+.alignItemMiddle {
+    vertical-align: middle;
+}
+.alignMiddle{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.spinner {
+    border: 16px solid silver;
+    border-top: 16px solid #337AB7;
+    border-radius: 500%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1200ms linear infinite;
+    top: 40%;
+    left: 55%;
+    position: absolute;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+.cardContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}

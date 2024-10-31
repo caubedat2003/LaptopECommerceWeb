@@ -19,19 +19,22 @@ namespace LaptopECommerceWASM.Services
             _httpClient = httpClient;
         }
 
-        public Task<bool> CreateLaptop(LaptopRequest request)
+        public async Task<bool> CreateLaptop(LaptopRequest request)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PostAsJsonAsync("/api/Laptop", request);
+            return result.IsSuccessStatusCode;
         }
 
-        public Task<bool> DeleteLaptop(Guid id)
+        public async Task<bool> DeleteLaptop(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.DeleteAsync($"/api/Laptop/{id}");
+            return result.IsSuccessStatusCode;
         }
 
-        public Task<LaptopRequest> GetLaptopDetail(Guid id)
+        public async Task<LaptopRequest> GetLaptopDetail(Guid id)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.GetFromJsonAsync<LaptopRequest>($"/api/Laptop/{id}");
+            return result;
         }
 
         public async Task<List<LaptopRequest>> GetLaptops()
@@ -40,9 +43,10 @@ namespace LaptopECommerceWASM.Services
             return result;
         }
 
-        public Task<bool> UpdateLaptop(Guid id, LaptopRequest request)
+        public async Task<bool> UpdateLaptop(Guid id, LaptopRequest request)
         {
-            throw new NotImplementedException();
+            var result = await _httpClient.PutAsJsonAsync($"/api/Laptop/{id}", request);
+            return result.IsSuccessStatusCode;
         }
     }
 }

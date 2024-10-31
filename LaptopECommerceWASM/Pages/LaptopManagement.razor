@@ -1,0 +1,59 @@
+﻿@page "/LaptopManagement"
+@using LaptopECommerceWASM.Services
+@using LaptopECommerce.Models
+@inject ILaptopService LaptopService
+
+
+@if (Laptops == null)
+{
+    <div>loading ......</div>
+}
+else
+{
+    <h3>LaptopManagement</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Hãng</th>
+                <th>CPU</th>
+                <th>RAM</th>
+                <th>Card đồ hoạ</th>
+                <th>Bộ nhớ trong</th>
+                <th>Giá</th>
+                <th>Hình ảnh</th>
+                <th>Ngày tạo</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Laptops)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Brand</td>
+                    <td>@item.CPU</td>
+                    <td>@item.RAM</td>
+                    <td>@item.GraphicsCard</td>
+                    <td>@item.Storage</td>
+                    <td>@item.Price</td>
+                    <td>@item.ImageURL</td>
+                    <td>@item.CreatedDate.ToString("dd/MM/yyyy hh:mm")</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private List<LaptopRequest> Laptops;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Laptops = await LaptopService.GetLaptops();
+    }
+}

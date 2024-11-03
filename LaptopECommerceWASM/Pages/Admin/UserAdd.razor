@@ -1,0 +1,193 @@
+﻿@page "/UserAdd"
+@using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
+@using LaptopECommerceWASM.Services
+@inject IUserService UserApiClient
+@inject IToastService toastService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
+
+<h3 class="mb-3">Thêm người dùng</h3>
+@if (ShowErrors)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in Errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+ <EditForm Model="userModel" OnSubmit="HandleAddUser">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Họ</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="name" class="form-control" @bind-Value="userModel.LastName"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Tên</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="name" class="form-control" @bind-Value="userModel.FirstName"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="name" class="form-control" @bind-Value="userModel.Email"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Số điện thoại</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="phoneNumber" class="form-control" @bind-Value="userModel.PhoneNumber"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Giới tính</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputSelect id="gender" class="form-select" @bind-Value="userModel.Gender">
+                        <option>------ Chọn giới tính -----</option>
+                        @foreach(string item in Enum.GetNames(typeof(Gender)))
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Ngày sinh</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputDate id="dateOfBirth" class="form-control" @bind-Value="@dateOfBirth"></InputDate>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Địa chỉ</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="address" class="form-control" @bind-Value="userModel.Address"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Tên đăng nhập</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="username" class="form-control" @bind-Value="userModel.UserName"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Mật khẩu</h6>
+                </div>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input id="password" type="password" class="form-control" @ref="passwordInput"
+                               placeholder="Password" @bind-value="userModel.Password" />
+                        <button class="btn btn-outline-secondary" type="button" @onclick="TogglePasswordVisibility">
+                            <i class="ri-eye-line" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Role</h6>
+                </div>
+                <div class="col-sm-9">
+                    <div class="col-sm-9">
+                        <InputSelect id="role" class="form-select" @bind-Value="userModel.Role">
+                            <option value="Customer">------ Chọn quyền -----</option>
+                            <option value="Admin">Quản trị viên</option>
+                            <option value="Customer">Khách hàng</option>
+                            <option value="Shipper">Nhân viên giao hàng</option>
+                        </InputSelect>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <button class="btn btn-outline-secondary" type="button" @onclick="()=>BackBtn()">
+                <i class="ri-arrow-left-line"></i>
+                Quay lại
+            </button>
+            <button class="btn btn-success" type="submit">
+                <i class="ri-save-3-line"></i>
+                Lưu
+            </button>
+        </div>
+    </div>
+    
+ </EditForm>
+
+@code {
+    private UserDto userModel = new UserDto();
+    private ElementReference passwordInput;
+    private bool isPasswordVisible = false;
+    private bool ShowErrors;
+    private List<string> Errors = new List<string>();
+    private DateTime dateOfBirth = DateTime.Now.AddDays(0);
+
+    public async Task HandleAddUser()
+    {
+        ShowErrors = false;
+        Errors.Clear();
+        userModel.DateOfBirth = dateOfBirth;
+        var result = await UserApiClient.Create(userModel);
+        if (result.Successful)
+        {
+            toastService.ShowSuccess($"Thêm người dùng {userModel.FirstName} thành công!");
+            navigationManager.NavigateTo("/UserList");
+        }
+        else
+        {
+            ShowErrors = true;
+            Errors = result.Errors.ToList();
+            toastService.ShowError("Có lỗi xảy ra. Vui lòng liên hệ admin");
+        }
+    }
+
+    private void BackBtn()
+    {
+        navigationManager.NavigateTo("UserList");
+    }
+
+    private async Task TogglePasswordVisibility()
+    {
+        isPasswordVisible = !isPasswordVisible;
+        var newType = isPasswordVisible ? "text" : "password";
+        await JSRuntime.InvokeVoidAsync("togglePasswordVisibility", passwordInput, newType);
+    }
+}

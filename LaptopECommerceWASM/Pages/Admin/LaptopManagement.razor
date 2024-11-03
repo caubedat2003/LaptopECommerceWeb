@@ -19,7 +19,10 @@ else
             <div class="card-body shadow-sm">
                 <div class="row">
                     <div class="col-sm-2">
-                        <img src="@item.ImageURL" width="150" height="150" />
+                        <div class="d-flex flex-column align-items-center">
+                            <img src="@item.ImageURL" width="150" height="150" />
+                        </div>
+                        
                     </div>
                     <div class="col-sm-6 fw-bold alignMiddle">
                         Tên: @item.Name
@@ -29,7 +32,7 @@ else
                     </div>
                     <div class="col-sm-2 alignMiddle">
                         <a href="/LaptopDetails/@item.LaptopId" class="btn btn-outline-primary">
-                            <i class="ri-user-3-line"></i>
+                            <i class="ri-computer-line"></i>
                             Chi tiết
                         </a>
                         <a href="/EditPatient/@item.LaptopId" class="btn btn-outline-primary">

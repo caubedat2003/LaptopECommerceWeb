@@ -1,0 +1,143 @@
+﻿@page "/register"
+@using LaptopECommerce.Models
+@using LaptopECommerceWASM.Services
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject IToastService toastService
+@inject IJSRuntime JSRuntime
+
+@if (ShowErrors)
+{
+    <div class="alert alert-danger">
+        @foreach(var error in Errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+<div class="page-body-center">
+    <div class="registerCard">
+        <div class="title-register">
+            <h3 class="m-2"><i class="ri-user-add-line"></i></h3>
+            <h3 class="m-2">Đăng kí người dùng</h3>
+        </div>
+        <hr class="m-3"/>
+        <EditForm Model="registerModel" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-5">
+                        <label for="Name">Tên</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="name">
+                                <i class="ri-user-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="name" placeholder="Tên" @bind-value="registerModel.FirstName" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.FirstName"></ValidationMessage>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label for="Name">Họ</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="name">
+                                <i class="ri-user-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="name" placeholder="Họ " @bind-value="registerModel.LastName" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.LastName"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <label for="email">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="email">
+                                <i class="ri-mail-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="email" placeholder="Email" @bind-value="registerModel.Email" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.Email"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <label for="username">Tên tài khoản</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="username">
+                                <i class="ri-account-circle-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="username" placeholder="Tên tài khoản" @bind-value="registerModel.UserName" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.UserName"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="password">
+                                <i class="ri-lock-fill"></i>
+                            </span>
+                            <input type="password" id="password" class="form-control" @ref="passwordInput"
+                                   aria-describedby="password" placeholder="Mật khẩu" @bind-value="registerModel.Password" />
+                            <button class="btn btn-outline-secondary" type="button" @onclick="TogglePasswordVisibility">
+                                <i class="ri-eye-line" id="passwordIcon"></i>
+                            </button>
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.Password"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-center">
+                <button type="submit" class="btn register-btn">Đăng kí</button>
+            </div>
+            <div class="link-login">
+                Đã có tài khoản? <a href="/login">Đăng nhập</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private RegisterRequest registerModel = new RegisterRequest();
+    private bool ShowErrors;
+    private List<string> Errors = new List<string>();
+    private ElementReference passwordInput;
+    private bool isPasswordVisible = false;
+
+    private async Task HandleRegister(){
+        ShowErrors = false;
+        Errors.Clear();
+        var response = await AuthService.Register(registerModel);
+        if (response.Successful)
+        {
+            NavigationManager.NavigateTo("/login");
+            toastService.ShowSuccess("Đăng kí thành công!");
+        }
+        else
+        {
+            ShowErrors = true;
+            Errors = response.Errors.ToList();
+            toastService.ShowError("Đăng kí không thành công!");
+        }
+    }
+
+    private async Task TogglePasswordVisibility()
+    {
+        isPasswordVisible = !isPasswordVisible;
+        var newType = isPasswordVisible ? "text" : "password";
+        await JSRuntime.InvokeVoidAsync("togglePasswordVisibility", passwordInput, newType);
+    }
+}

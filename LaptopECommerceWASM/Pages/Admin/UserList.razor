@@ -1,0 +1,122 @@
+﻿@page "/UserList"
+@using Microsoft.AspNetCore.Components.Authorization
+@using LaptopECommerce.Models;
+@using LaptopECommerceWASM.Services
+@using LaptopECommerceWASM.Components
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService
+@inject IConfiguration Configuration
+
+@if(Users == null)
+{
+    <div>loading.....</div>
+}
+else
+{
+    <div class="titleLayout mb-3">
+        <h3>Quản lý người dùng</h3>
+        <a href="/UserAdd" class="btn btn-light-green-outline">
+            <i class="ri-user-add-line"></i>
+            Thêm người dùng
+        </a>
+    </div>
+
+    <table class="table">
+        <thead class="head-color">
+            <tr>
+                <th class="head-title-table" width="12%">Họ tên</th>
+                <th class="head-title-table" width="10%">Email</th>
+                <th class="head-title-table" width="10%">Số điện thoại</th>
+                <th class="head-title-table" width="7%">Giới tính</th>
+                <th class="head-title-table" width="8%">Ngày sinh</th>
+                <th class="head-title-table">Địa chỉ</th>
+                <th class="head-title-table" width="13%">Tên người dùng</th>
+                <th class="head-title-table" width="8%">Quyền</th>
+                <th class="head-title-table" width="13%"></th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @foreach (var item in Users)
+            {
+                <tr>
+                    <td class="vertical-middle-align">@item.LastName  @item.FirstName</td>
+                    <td class="vertical-middle-align">@item.Email</td>
+                    <td class="vertical-middle-align">@item.PhoneNumber</td>
+                    <td class="vertical-middle-align">@item.Gender</td>
+                    <td class="vertical-middle-align">@item.DateOfBirth.ToString(Configuration["DateOnlyFormat"])</td>
+                    <td class="vertical-middle-align">@item.Address</td>
+                    <td class="vertical-middle-align">@item.UserName</td>
+                    <td class="vertical-middle-align">@item.Role</td>
+                    <td>
+                        <a class="btn btn-primary light-green-btn" href="/UserDetails/@item.Id"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Chi tiết người dùng">
+                            <i class="ri-user-settings-line"></i>
+                        </a>
+                        <a class="btn btn-primary light-green-btn" href="/UserEdit/@item.Id"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Chỉnh sửa người dùng">
+                            <i class="ri-edit-line"></i>
+                        </a>
+                        <a class="btn btn-danger" @onclick="()=>OnDeleteUser(item.Id)"
+                            data-bs-toggle="tooltip" data-bs-placement="top" title="Xoá người dùng">
+                            <i class="ri-delete-bin-5-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <Confirmation ConfirmationMessage="Xác nhận xoá người dùng này?"
+                  ConfirmationTitle="Xoá người dùng"
+                  @ref="DeleteConfirmation"
+                  ConfirmationChanged="OnConfirmDeleteUser">
+    </Confirmation>
+}
+
+@code {
+    private UserDto userModel = new UserDto();
+    private List<UserDto> Users;
+    private bool isAuthorized = false;
+    private string RoleName = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        // if(user.Identity.IsAuthenticated && user.HasClaim(c => c.Type == "role" && c.Value == "Admin"))
+        // {
+            isAuthorized = true;
+            Users = await UserService.GetUsers();
+
+        // if(user.Identity.IsAuthenticated && user.HasClaim(c => c.Type == "role" && c.Value == "Admin"))
+        // {
+        //     isAuthorized = true;
+        //     Users = await UserApiClient.GetUsersList()
+        // }
+        // else
+        // {
+        //     isAuthorized = false;
+        // }
+    }
+
+    protected Confirmation DeleteConfirmation { set; get; }
+    private Guid deleteId { get; set; }
+
+    public void OnDeleteUser(Guid id)
+    {
+        deleteId = id;
+        DeleteConfirmation.Show();
+    }
+    public async Task OnConfirmDeleteUser(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await UserService.Delete(deleteId);
+            Users = await UserService.GetUsers();
+            toastService.ShowSuccess("Xoá người dùng thành công");
+        }
+    }
+}

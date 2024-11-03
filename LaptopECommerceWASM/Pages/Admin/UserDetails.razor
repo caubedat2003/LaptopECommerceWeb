@@ -1,0 +1,120 @@
+﻿@page "/UserDetails/{userId}"
+@using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
+@using LaptopECommerceWASM.Services
+@using LaptopECommerceWASM.Components
+@inject IUserService UserApiClient
+@inject IConfiguration Configuration
+
+@if(User == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">ID người dùng: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.Id
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Họ tên: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.LastName @User.FirstName
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Email: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.Email
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Số điện thoại: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.PhoneNumber
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Giới tính: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.Gender
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Ngày sinh: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.DateOfBirth.ToString(Configuration["DateOnlyFormat"])
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Địa chỉ: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.Address
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Tên đăng nhập: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.UserName
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Quyền: </h6>
+                </div>
+                <div class="col-sm-9">
+                    @User.Role
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string userId { get; set; }
+
+    private UserDto User { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await UserApiClient.GetUserDetail(Guid.Parse(userId));
+    }
+}

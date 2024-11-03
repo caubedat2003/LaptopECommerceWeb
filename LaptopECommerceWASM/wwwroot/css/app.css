@@ -101,7 +101,7 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
-.alignItemMiddle {
+.vertical-middle-align {
     vertical-align: middle;
 }
 .alignMiddle{
@@ -228,4 +228,126 @@ code {
 .button-center {
     display: flex;
     justify-content: center;
+}
+.titleLayout {
+    display: flex;
+    justify-content: space-between;
+}
+.registerCard {
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 1px gray;
+    margin: 1rem;
+    width: 40%;
+    height: fit-content;
+}
+
+.title-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.register-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 25px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+    .register-btn:hover {
+        background: #009f9d;
+        color: #e9f4fb;
+        transition: .5s;
+    }
+.link-login {
+    margin: 20px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #666666;
+}
+.head-color {
+    background-color: #4DA7A9 !important;
+    color: white !important;
+}
+
+.head-title-table {
+    font-weight: bold;
+    font-size: initial;
+    background-color: inherit !important;
+    border-bottom-color: currentColor !important;
+    color: white !important;
+}
+
+.table > :not(:last-child) > :last-child > * {
+    border-bottom-color: currentColor !important;
+    color: currentColor !important;
+}
+
+.btn-light-green {
+    color: #4DA7A9;
+    padding-right: 0.3rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: large;
+}
+
+.btn-light-green-outline {
+    color: #4DA7A9;
+    padding-right: 0.3rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: large;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+    .btn-light-green-outline:hover {
+        color: #3D8B8D;
+        padding-right: 0.3rem;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: large;
+        border: 2px solid #3D8B8D;
+        border-radius: 5px;
+    }
+
+.align-item-middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.divider-p {
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-top: solid 1px #e0e0e0;
+}
+.light-green-btn {
+    background-color: #4DA7A9 !important;
+    border-color: #4DA7A9 !important;
+}
+    .light-green-btn:hover {
+        background-color: #68C1C3 !important; /* A lighter shade for hover */
+        border-color: #68C1C3 !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+    }
+
+.m-right-1{
+    margin-right: 1rem;
+}
+.m-right-2 {
+    margin-right: 2rem;
+}
+.m-right-3 {
+    margin-right: 3rem;
+}
+.grey-background {
+    background-color: #f2f4f7;
 }

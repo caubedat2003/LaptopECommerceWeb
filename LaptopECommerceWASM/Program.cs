@@ -17,6 +17,7 @@ namespace LaptopECommerceWASM
 
             builder.Services.AddBlazoredToast();
             builder.Services.AddTransient<ILaptopService, LaptopService>();
+            builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();

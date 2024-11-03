@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaptopECommerce.Models
+namespace LaptopECommerce.Models.Enum
 {
-    public class UserRequest
+    public enum Gender
     {
-
+        Nam,
+        Nữ,
+        Khác
     }
 }

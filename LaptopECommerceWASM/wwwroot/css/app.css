@@ -339,6 +339,30 @@ code {
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
     }
 
+.blue-btn {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+}
+
+    .blue-btn:hover {
+        background-color: #3c8dff !important; /* A lighter shade for hover */
+        border-color: #3c8dff !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+    }
+
+.red-btn {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+    .red-btn:hover {
+        background-color: #e55361 !important; /* A lighter shade for hover */
+        border-color: #e55361 !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+        color: white !important;
+    }
+
 .m-right-1{
     margin-right: 1rem;
 }
@@ -348,6 +372,44 @@ code {
 .m-right-3 {
     margin-right: 3rem;
 }
+.pad-1{
+    padding: 1rem;
+}
+.pad-2 {
+    padding: 2rem;
+}
+.pad-3 {
+    padding: 3rem;
+}
+.pad-4 {
+    padding: 4rem;
+}
 .grey-background {
     background-color: #f2f4f7;
 }
+.card-img-top {
+    border-bottom: 1px solid #ddd;
+}
+.banner-home {
+    height: 500px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/banner.png');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+.cart-btn {
+    background-color: #9329b7 !important;
+    border-color: #9329b7 !important;
+    border-radius: 100%;
+}
+    .cart-btn:hover {
+        background-color: #a944cc !important; /* Bright orchid */
+        border-color: #a944cc !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }

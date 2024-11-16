@@ -1,0 +1,151 @@
+﻿@page "/LaptopEdit/{LaptopId}"
+@using LaptopECommerce.Models
+@using LaptopECommerceWASM.Services
+@using LaptopECommerceWASM.Components
+@inject ILaptopService LaptopService
+@inject IToastService toastService
+@inject NavigationManager navigationManager
+
+@if (LaptopModel == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <h3 class="mb-3">Chỉnh sửa laptop</h3>
+    <EditForm Model="LaptopModel" OnValidSubmit="HandleEditLaptop">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Tên</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="name" class="form-control" @bind-Value="LaptopModel.Name"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Hãng</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="brand" class="form-control" @bind-Value="LaptopModel.Brand"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">CPU</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="cpu" class="form-control" @bind-Value="LaptopModel.CPU"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">RAM</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="ram" class="form-control" @bind-Value="LaptopModel.RAM"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Card đồ hoạ</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="gc" class="form-control" @bind-Value="LaptopModel.GraphicsCard"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Bộ nhớ</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="storage" class="form-control" @bind-Value="LaptopModel.Storage"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Giá</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputNumber id="price" class="form-control" @bind-Value="LaptopModel.Price"></InputNumber>
+                    </div>
+                </div>
+                <hr />
+
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0 fw-bold">Đường dẫn ảnh</h6>
+                    </div>
+                    <div class="col-sm-9">
+                        <InputText id="name" class="form-control" @bind-Value="LaptopModel.ImageURL"></InputText>
+                    </div>
+                </div>
+                <hr />
+
+                <button class="btn btn-outline-secondary" type="button" @onclick="()=>BackBtn()">
+                    <i class="ri-arrow-left-line"></i>
+                    Quay lại
+                </button>
+                <button class="btn btn-success" type="submit">
+                    <i class="ri-save-3-line"></i>
+                    Lưu
+                </button>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string LaptopId { get; set; }
+
+    private LaptopRequest LaptopModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var laptop = await LaptopService.GetLaptopDetail(Guid.Parse(LaptopId));
+        LaptopModel = new LaptopRequest();
+        LaptopModel.Name = laptop.Name;
+        LaptopModel.Brand = laptop.Brand;
+        LaptopModel.CPU = laptop.CPU;
+        LaptopModel.RAM = laptop.RAM;
+        LaptopModel.GraphicsCard = laptop.GraphicsCard;
+        LaptopModel.Storage = laptop.Storage;
+        LaptopModel.Price = laptop.Price;
+        LaptopModel.ImageURL = laptop.ImageURL;
+    }
+
+    public async Task HandleEditLaptop()
+    {
+        var result = await LaptopService.UpdateLaptop(Guid.Parse(LaptopId), LaptopModel);
+        if (result)
+        {
+            toastService.ShowSuccess($"Thêm sản phẩm {LaptopModel.Name} thành công!");
+            navigationManager.NavigateTo("/LaptopManagement");
+        }
+        else
+        {
+            toastService.ShowError("Có lỗi xảy ra. Vui lòng liên hệ admin");
+        }
+    }
+
+    private void BackBtn()
+    {
+        navigationManager.NavigateTo("LaptopManagement");
+    }
+}

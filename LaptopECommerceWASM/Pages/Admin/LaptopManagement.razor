@@ -3,7 +3,7 @@
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
 @inject ILaptopService LaptopService
-
+@inject IToastService toastService
 
 @if (Laptops == null)
 {
@@ -11,7 +11,13 @@
 }
 else
 {
-    <h3>LaptopManagement</h3>
+    <div class="titleLayout mb-3">
+        <h3>Danh sách laptop</h3>
+        <a href="/LaptopAdd" class="btn btn-primary blue-btn">
+            <i class="ri-add-line"></i>
+            Thêm laptop
+        </a>
+    </div>
 
     @foreach(var item in Laptops)
     {
@@ -20,34 +26,43 @@ else
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="d-flex flex-column align-items-center">
-                            <img src="@item.ImageURL" width="150" height="150" />
+                            <img src="/image/@item.ImageURL" width="150" height="150" />
                         </div>
                         
                     </div>
-                    <div class="col-sm-6 fw-bold alignMiddle">
+                    <div class="col-sm-5 fw-bold alignMiddle">
                         Tên: @item.Name
                     </div>
                     <div class="col-sm-2 alignMiddle">
                         Giá @item.Price
                     </div>
-                    <div class="col-sm-2 alignMiddle">
-                        <a href="/LaptopDetails/@item.LaptopId" class="btn btn-outline-primary">
-                            <i class="ri-computer-line"></i>
-                            Chi tiết
-                        </a>
-                        <a href="/EditPatient/@item.LaptopId" class="btn btn-outline-primary">
-                            <i class="ri-edit-line"></i>
-                            Sửa
-                        </a>
-                        <button class="btn btn-primary" >
-                            <i class="ri-delete-bin-line"></i>
-                            Xoá
-                        </button>
+                    <div class="col-sm-3 alignMiddle">
+                        <div class="d-flex gap-2">
+                            <a href="/LaptopDetails/@item.LaptopId" class="btn btn-primary blue-btn">
+                                <i class="ri-computer-line"></i>
+                                Chi tiết
+                            </a>
+                            <a href="/LaptopEdit/@item.LaptopId" class="btn btn-primary blue-btn">
+                                <i class="ri-edit-line"></i>
+                                Sửa
+                            </a>
+                            <a class="btn btn-primaty red-btn" @onclick="()=>OnDeleteLaptop(item.LaptopId)"
+                               data-bs-toggle="tooltip" data-bs-placement="top" title="Xoá người dùng">
+                                <i class="ri-delete-bin-5-fill"></i>
+                                Xoá
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     }
+
+    <Confirmation ConfirmationMessage="Xác nhận xoá sản phẩm này?"
+                  ConfirmationTitle="Xoá sản phẩm"
+                  @ref="DeleteConfirmation"
+                  ConfirmationChanged="OnConfirmDeleteLaptop">
+    </Confirmation>
 }
 
 
@@ -57,5 +72,23 @@ else
     protected override async Task OnInitializedAsync()
     {
         Laptops = await LaptopService.GetLaptops();
+    }
+
+    protected Confirmation DeleteConfirmation { set; get; }
+    private Guid deleteId { get; set; }
+
+    public void OnDeleteLaptop(Guid id)
+    {
+        deleteId = id;
+        DeleteConfirmation.Show();
+    }
+    public async Task OnConfirmDeleteLaptop(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await LaptopService.DeleteLaptop(deleteId);
+            Laptops = await LaptopService.GetLaptops();
+            toastService.ShowSuccess("Xoá sản phẩm thành công");
+        }
     }
 }

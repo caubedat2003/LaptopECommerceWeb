@@ -1,0 +1,127 @@
+﻿@page "/LaptopAdd"
+@using LaptopECommerce.Models
+@using LaptopECommerceWASM.Components
+@using LaptopECommerceWASM.Services
+@inject ILaptopService LaptopService
+@inject IToastService toastService
+@inject NavigationManager navigationManager
+
+<h3 class="mb-3">Thêm laptop</h3>
+<EditForm Model="LaptopModel" OnValidSubmit="HandleAddLaptop">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Tên</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="name" class="form-control" @bind-Value="LaptopModel.Name"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Hãng</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="brand" class="form-control" @bind-Value="LaptopModel.Brand"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">CPU</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="cpu" class="form-control" @bind-Value="LaptopModel.CPU"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">RAM</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="ram" class="form-control" @bind-Value="LaptopModel.RAM"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Card đồ hoạ</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="gc" class="form-control" @bind-Value="LaptopModel.GraphicsCard"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Bộ nhớ</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="storage" class="form-control" @bind-Value="LaptopModel.Storage"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Giá</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputNumber id="price" class="form-control" @bind-Value="LaptopModel.Price"></InputNumber>
+                </div>
+            </div>
+            <hr />
+
+
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0 fw-bold">Đường dẫn ảnh</h6>
+                </div>
+                <div class="col-sm-9">
+                    <InputText id="name" class="form-control" @bind-Value="LaptopModel.ImageURL"></InputText>
+                </div>
+            </div>
+            <hr />
+
+            <button class="btn btn-outline-secondary" type="button" @onclick="()=>BackBtn()">
+                <i class="ri-arrow-left-line"></i>
+                Quay lại
+            </button>
+            <button class="btn btn-success" type="submit">
+                <i class="ri-save-3-line"></i>
+                Lưu
+            </button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private LaptopRequest LaptopModel = new LaptopRequest();
+
+    public async Task HandleAddLaptop()
+    {
+        var result = await LaptopService.CreateLaptop(LaptopModel);
+        if (result)
+        {
+            toastService.ShowSuccess($"Thêm sản phẩm {LaptopModel.Name} thành công!");
+            navigationManager.NavigateTo("/LaptopManagement");
+        }
+        else
+        {
+            toastService.ShowError("Có lỗi xảy ra. Vui lòng liên hệ admin");
+        }
+    }
+
+    private void BackBtn()
+    {
+        navigationManager.NavigateTo("LaptopManagement");
+    }
+}

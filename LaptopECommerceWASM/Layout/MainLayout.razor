@@ -12,12 +12,12 @@
                 ErrorIcon="fa fa-bug" />
 
 <div class="page">
-    <div class="sidebar">
+    @* <div class="sidebar">
         <NavMenu />
-    </div>
+    </div> *@
 
     <main>
-        <div class="top-row px-4">
+        @* <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
                     Hello, @context.User.Identity.Name
@@ -31,6 +31,65 @@
         </div>
 
         <article class="content px-4">
+            @Body
+        </article> *@
+
+        <!-- Thanh ngang -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+            <div class="container-fluid">
+                <!-- Logo hoặc tên trang -->
+                <a class="navbar-brand" href="/">Laptop Store</a>
+
+                <!-- Phần ở giữa (4 mục chính) -->
+                <div class="collapse navbar-collapse justify-content-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Trang chủ</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hãng
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/BrandApple">Apple</a></li>
+                                <li><a class="dropdown-item" href="/BrandSamsung">Samsung</a></li>
+                                <li><a class="dropdown-item" href="/BrandMSI">MSI</a></li>
+                                <li><a class="dropdown-item" href="/BrandACER">ACER</a></li>
+                                <li><a class="dropdown-item" href="/BrandASUS">ASUS</a></li>
+                                <li><a class="dropdown-item" href="/BrandLenovo">Lenovo</a></li>
+                                <li><a class="dropdown-item" href="/BrandAlienware">Alienware</a></li>
+                                <li><a class="dropdown-item" href="/BrandDell">Dell</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Cart">Giỏ hàng</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Contact">Liên hệ</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Phần bên phải (Login/Logout/Register) -->
+                <AuthorizeView>
+                    <Authorized>
+                        <div class="d-flex">
+                            <span class="navbar-text me-3">Hello, @context.User.Identity.Name</span>
+                            <a href="/logout" class="btn btn-outline-secondary ">Logout</a>
+                        </div>
+                    </Authorized>
+                    <NotAuthorized>
+                        <div class="d-flex">
+                            <a href="/login" class="btn btn-outline-info btn-sm me-2">Login</a>
+                            <a href="/register" class="btn btn-outline-info btn-sm">Register</a>
+                        </div>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </nav>
+
+        <!-- Nội dung trang -->
+        <article class="content px-4 mt-3">
             @Body
         </article>
     </main>

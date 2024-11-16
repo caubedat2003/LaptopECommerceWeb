@@ -1,9 +1,67 @@
 ﻿@page "/"
+@using LaptopECommerceWASM.Services
+@using LaptopECommerce.Models
+@using LaptopECommerceWASM.Components
+@inject ILaptopService LaptopService
 
-<PageTitle>Home</PageTitle>
+<div class="banner-home">
 
-<h1>Hello, world!</h1>
+</div>
 
-Welcome to your new app.
+    <div class="row">
+        <div class="col-sm-2">
+        </div>
+        <div class="col-sm-8">
+            @* Laptop list loaded here *@
+            @if (Laptops == null)
+            {
+                <LoadingIndicator />
+            }
+            else if (Laptops.Count == 0)
+            {
+                <p>Hiện không có sản phẩm !</p>
+            }
+            else
+            {
+                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                @foreach (var laptop in Laptops.Chunk(4))
+                {
+                    <div class="row mb-4">
+                        @foreach (var item in laptop)
+                        {
+                            <div class="col-sm-3">
+                                <div class="card shadow-sm h-100 pad-1">
+                                    <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title text-center">@item.Brand</h5>
+                                        <p class="card-text text-center text-truncate" title="@item.Name">@item.Name</p>
+                                        <p class="card-text text-center text-danger fw-bold">
+                                            @LaptopECommerceWASM.Components.CurrencyHelper.FormatCurrency(item.Price)
+                                        </p>
+                                        <div class="fw-bold">
+                                            <button class="btn btn-primary cart-btn">
+                                                <i class="ri-shopping-cart-line"></i>
+                                            </button>
+                                            Thêm vào giỏ
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
 
-Laptop dùng để học HTMLOL, CSS2, JAVALORANT !!!
+
+@code{
+    private List<LaptopRequest> Laptops;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+    }
+}

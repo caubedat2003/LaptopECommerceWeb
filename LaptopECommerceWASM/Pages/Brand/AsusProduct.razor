@@ -1,16 +1,29 @@
-﻿@page "/"
-@using LaptopECommerceWASM.Services
+﻿@page "/BrandASUS"
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
-@inject ILaptopService LaptopService
+@using LaptopECommerceWASM.Services
+@inject IProcedureService ProcedureService
 
-<div class="banner-home">
-</div>
-
-<div class="row">
+@if (Laptops == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
         <div class="col-sm-2">
         </div>
         <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="fw-bold">ASUS</h3>
+                    <p>ASUS là một trong những thương hiệu laptop hàng đầu thế giới, nổi tiếng với sự đa dạng về sản phẩm, từ các dòng phổ thông đến các dòng máy cao cấp và chuyên dụng. Các dòng laptop tiêu biểu của ASUS bao gồm VivoBook, ZenBook, TUF Gaming, ROG (Republic of Gamers) và ExpertBook, đáp ứng hầu hết các nhu cầu từ học tập, làm việc đến giải trí và chơi game.</p>
+                    <p>Ưu điểm nổi bật của máy tính ASUS bao gồm hiệu năng vượt trội, công nghệ tiên tiến, được trang bị các bộ vi xử lý tiên tiến và card đồ họa mạnh mẽ, giúp xử lý tốt các tác vụ từ cơ bản đến phức tạp.</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="banner-asus"></div>
+                </div>
+            </div>
             @* Laptop list loaded here *@
             @if (Laptops == null)
             {
@@ -22,7 +35,7 @@
             }
             else
             {
-                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                <h2 class="fw-bold mb-3">Các sản phẩm của hãng ASUS</h2>
                 @foreach (var laptop in Laptops.Chunk(4))
                 {
                     <div class="row mb-4">
@@ -32,10 +45,10 @@
                                 <div class="card shadow-sm h-100 pad-1">
                                     <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
                                     <div class="card-body d-flex flex-column">
-                                        <a href="/Product/@item.LaptopId"  class="card-title text-center fs-5"
-                                            style="text-decoration:none; color:black">@item.Brand</a>
+                                        <a href="/Product/@item.LaptopId" class="card-title text-center fs-5"
+                                           style="text-decoration:none; color:black">@item.Brand</a>
                                         <a href="/Product/@item.LaptopId" class="card-text text-center text-truncate"
-                                            title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
+                                           title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
                                         <p class="card-text text-center text-danger fw-bold mt-1">
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
@@ -56,13 +69,14 @@
         <div class="col-sm-2">
         </div>
     </div>
+}
 
 
-@code{
+@code {
     private List<LaptopRequest> Laptops;
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await ProcedureService.GetASUSLaptops();
     }
 }

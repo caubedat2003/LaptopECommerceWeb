@@ -1,16 +1,29 @@
-﻿@page "/"
-@using LaptopECommerceWASM.Services
+﻿@page "/BrandApple"
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
-@inject ILaptopService LaptopService
+@using LaptopECommerceWASM.Services
+@inject IProcedureService ProcedureService
 
-<div class="banner-home">
-</div>
-
-<div class="row">
+@if(Laptops == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
         <div class="col-sm-2">
         </div>
         <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="fw-bold">Apple</h3>
+                    <p>Máy tính Apple, bao gồm dòng sản phẩm nổi tiếng như MacBook, iMac và Mac Mini, là những thiết bị công nghệ cao cấp được phát triển bởi Apple Inc. Với thiết kế tinh tế, phần cứng mạnh mẽ và hệ điều hành macOS độc quyền, máy tính Apple đã trở thành biểu tượng của sự sáng tạo và hiệu suất.</p>
+                    <p>Ưu điểm nổi bật của máy tính Apple bao gồm thiết kế sang trọng, tuổi thọ pin cao và khả năng đồng bộ hóa mạnh mẽ với các thiết bị khác trong hệ sinh thái của Apple. Hệ điều hành macOS được tối ưu hóa tốt, mang lại hiệu suất ổn định và bảo mật cao.</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="banner-apple"></div>
+                </div>
+            </div>
             @* Laptop list loaded here *@
             @if (Laptops == null)
             {
@@ -22,7 +35,7 @@
             }
             else
             {
-                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                <h2 class="fw-bold mb-3">Các sản phẩm của hãng Apple</h2>
                 @foreach (var laptop in Laptops.Chunk(4))
                 {
                     <div class="row mb-4">
@@ -32,10 +45,10 @@
                                 <div class="card shadow-sm h-100 pad-1">
                                     <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
                                     <div class="card-body d-flex flex-column">
-                                        <a href="/Product/@item.LaptopId"  class="card-title text-center fs-5"
-                                            style="text-decoration:none; color:black">@item.Brand</a>
+                                        <a href="/Product/@item.LaptopId" class="card-title text-center fs-5"
+                                           style="text-decoration:none; color:black">@item.Brand</a>
                                         <a href="/Product/@item.LaptopId" class="card-text text-center text-truncate"
-                                            title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
+                                           title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
                                         <p class="card-text text-center text-danger fw-bold mt-1">
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
@@ -56,13 +69,14 @@
         <div class="col-sm-2">
         </div>
     </div>
+}
 
 
-@code{
+@code {
     private List<LaptopRequest> Laptops;
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await ProcedureService.GetAppleLaptops();
     }
 }

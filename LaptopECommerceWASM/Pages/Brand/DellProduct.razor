@@ -1,16 +1,29 @@
-﻿@page "/"
-@using LaptopECommerceWASM.Services
+﻿@page "/BrandDell"
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
-@inject ILaptopService LaptopService
+@using LaptopECommerceWASM.Services
+@inject IProcedureService ProcedureService
 
-<div class="banner-home">
-</div>
-
-<div class="row">
+@if (Laptops == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
         <div class="col-sm-2">
         </div>
         <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="fw-bold">Dell</h3>
+                    <p>Laptop Dell, sản phẩm của Dell Technologies – một tập đoàn công nghệ hàng đầu có trụ sở tại Mỹ, Dell mang đến nhiều dòng laptop phù hợp với các nhu cầu khác nhau, từ Inspiron dành cho người dùng phổ thông, XPS với thiết kế cao cấp cho dân văn phòng và sáng tạo, đến Alienware và G-Series dành cho game thủ với cấu hình mạnh mẽ.</p>
+                    <p>Ưu điểm của laptop Dell bao gồm sự bền bỉ trong thiết kế, hiệu suất vượt trội và khả năng hỗ trợ nâng cấp linh hoạt. Dịch vụ bảo hành và hỗ trợ kỹ thuật tận tâm là một lợi thế lớn, giúp Dell ghi điểm trong lòng người dùng.</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="banner-dell"></div>
+                </div>
+            </div>
             @* Laptop list loaded here *@
             @if (Laptops == null)
             {
@@ -22,7 +35,7 @@
             }
             else
             {
-                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                <h2 class="fw-bold mb-3">Các sản phẩm của hãng Dell</h2>
                 @foreach (var laptop in Laptops.Chunk(4))
                 {
                     <div class="row mb-4">
@@ -32,10 +45,10 @@
                                 <div class="card shadow-sm h-100 pad-1">
                                     <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
                                     <div class="card-body d-flex flex-column">
-                                        <a href="/Product/@item.LaptopId"  class="card-title text-center fs-5"
-                                            style="text-decoration:none; color:black">@item.Brand</a>
+                                        <a href="/Product/@item.LaptopId" class="card-title text-center fs-5"
+                                           style="text-decoration:none; color:black">@item.Brand</a>
                                         <a href="/Product/@item.LaptopId" class="card-text text-center text-truncate"
-                                            title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
+                                           title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
                                         <p class="card-text text-center text-danger fw-bold mt-1">
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
@@ -56,13 +69,14 @@
         <div class="col-sm-2">
         </div>
     </div>
+}
 
 
-@code{
+@code {
     private List<LaptopRequest> Laptops;
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await ProcedureService.GetDellLaptops();
     }
 }

@@ -1,16 +1,29 @@
-﻿@page "/"
-@using LaptopECommerceWASM.Services
+﻿@page "/BrandSamsung"
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
-@inject ILaptopService LaptopService
+@using LaptopECommerceWASM.Services
+@inject IProcedureService ProcedureService
 
-<div class="banner-home">
-</div>
-
-<div class="row">
+@if (Laptops == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
         <div class="col-sm-2">
         </div>
         <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="fw-bold">Samsung</h3>
+                    <p>Laptop Samsung là dòng sản phẩm máy tính xách tay chất lượng cao đến từ Samsung Electronics, một trong những tập đoàn công nghệ hàng đầu thế giới. Samsung cung cấp nhiều dòng laptop đa dạng, từ những thiết bị phổ thông đến các sản phẩm cao cấp như Galaxy Book, đáp ứng nhu cầu học tập, làm việc và giải trí của người dùng.</p>
+                    <p>Ưu điểm nổi bật của laptop Samsung bao gồm thiết kế mỏng nhẹ, màn hình AMOLED chất lượng cao mang lại màu sắc sống động và sắc nét, cùng khả năng tối ưu hóa hiệu suất nhờ các vi xử lý tiên tiến.</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="banner-samsung"></div>
+                </div>
+            </div>
             @* Laptop list loaded here *@
             @if (Laptops == null)
             {
@@ -22,7 +35,7 @@
             }
             else
             {
-                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                <h2 class="fw-bold mb-3">Các sản phẩm của hãng Samsung</h2>
                 @foreach (var laptop in Laptops.Chunk(4))
                 {
                     <div class="row mb-4">
@@ -32,10 +45,10 @@
                                 <div class="card shadow-sm h-100 pad-1">
                                     <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
                                     <div class="card-body d-flex flex-column">
-                                        <a href="/Product/@item.LaptopId"  class="card-title text-center fs-5"
-                                            style="text-decoration:none; color:black">@item.Brand</a>
+                                        <a href="/Product/@item.LaptopId" class="card-title text-center fs-5"
+                                           style="text-decoration:none; color:black">@item.Brand</a>
                                         <a href="/Product/@item.LaptopId" class="card-text text-center text-truncate"
-                                            title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
+                                           title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
                                         <p class="card-text text-center text-danger fw-bold mt-1">
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
@@ -56,13 +69,14 @@
         <div class="col-sm-2">
         </div>
     </div>
+}
 
 
-@code{
+@code {
     private List<LaptopRequest> Laptops;
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await ProcedureService.GetSamsungLaptops();
     }
 }

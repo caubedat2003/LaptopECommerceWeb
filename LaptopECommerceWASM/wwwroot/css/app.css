@@ -1,5 +1,5 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+﻿html, body {
+    font-family: 'Baloo Bhaijaan 2', Helvetica, Arial, sans-serif;
 }
 
 h1:focus {
@@ -401,7 +401,7 @@ code {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5rem;
+    margin-bottom: 1rem;
 }
 .cart-btn {
     background-color: #9329b7 !important;
@@ -413,3 +413,135 @@ code {
         border-color: #a944cc !important;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
+
+.paytone-one-regular {
+    font-family: "Paytone One", sans-serif;
+}
+.merriweather-sans {
+    font-family: "Merriweather Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+.navbar {
+    background-color: #f8f9fa; /* Màu nền của thanh ngang */
+}
+
+    .navbar .nav-link {
+        font-weight: bold; /* Tô đậm chữ */
+        color: #333; /* Màu chữ */
+    }
+
+        .navbar .nav-link:hover {
+            color: #007bff; /* Đổi màu chữ khi hover */
+        }
+
+    .navbar .dropdown-menu {
+        border-radius: 0.25rem; /* Bo góc menu dropdown */
+        border: none; /* Loại bỏ viền */
+    }
+
+.baloo-bhaijaan-2 {
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
+.baloo-bhaijaan-2-yellow {
+    font-family: "Baloo Bhaijaan 2", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    color: #e29c35;
+}
+.banner-apple {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/appleBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-samsung {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/samsungBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-asus {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/asusBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-acer {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/acerBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-msi {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/msiBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-lenovo {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/lenovoBanner.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.banner-dell {
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    background-image: url('/image/alienwareBanner.png');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}

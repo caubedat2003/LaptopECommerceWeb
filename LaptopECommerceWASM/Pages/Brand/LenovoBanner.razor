@@ -1,16 +1,29 @@
-﻿@page "/"
-@using LaptopECommerceWASM.Services
+﻿@page "/BrandLenovo"
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
-@inject ILaptopService LaptopService
+@using LaptopECommerceWASM.Services
+@inject IProcedureService ProcedureService
 
-<div class="banner-home">
-</div>
-
-<div class="row">
+@if (Laptops == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div class="row">
         <div class="col-sm-2">
         </div>
         <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 class="fw-bold">Lenovo</h3>
+                    <p>Laptop Lenovo, sản phẩm của Lenovo Group – một tập đoàn công nghệ hàng đầu thế giới có trụ sở tại Trung Quốc.  Lenovo cung cấp nhiều dòng laptop phù hợp với các đối tượng khác nhau, từ ThinkPad dành cho doanh nhân, IdeaPad dành cho học sinh, sinh viên, đến Legion dành cho game thủ và Yoga với thiết kế gập 360 độ linh hoạt dành cho người dùng sáng tạo.</p>
+                    <p>Ưu điểm của laptop Lenovo bao gồm sự bền bỉ trong thiết kế, thời lượng pin dài và khả năng tương thích với các công nghệ tiên tiến. Đặc biệt, giá thành hợp lý là một điểm mạnh giúp Lenovo tiếp cận được với nhiều đối tượng người dùng khác nhau.</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="banner-lenovo"></div>
+                </div>
+            </div>
             @* Laptop list loaded here *@
             @if (Laptops == null)
             {
@@ -22,7 +35,7 @@
             }
             else
             {
-                <h2 class="fw-bold mb-3">Các sản phẩm hot</h2>
+                <h2 class="fw-bold mb-3">Các sản phẩm của hãng Lenovo</h2>
                 @foreach (var laptop in Laptops.Chunk(4))
                 {
                     <div class="row mb-4">
@@ -32,10 +45,10 @@
                                 <div class="card shadow-sm h-100 pad-1">
                                     <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:200px; object-fit:cover;" />
                                     <div class="card-body d-flex flex-column">
-                                        <a href="/Product/@item.LaptopId"  class="card-title text-center fs-5"
-                                            style="text-decoration:none; color:black">@item.Brand</a>
+                                        <a href="/Product/@item.LaptopId" class="card-title text-center fs-5"
+                                           style="text-decoration:none; color:black">@item.Brand</a>
                                         <a href="/Product/@item.LaptopId" class="card-text text-center text-truncate"
-                                            title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
+                                           title="@item.Name" style="text-decoration:none; color:black">@item.Name</a>
                                         <p class="card-text text-center text-danger fw-bold mt-1">
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
@@ -56,13 +69,14 @@
         <div class="col-sm-2">
         </div>
     </div>
+}
 
 
-@code{
+@code {
     private List<LaptopRequest> Laptops;
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await ProcedureService.GetLenovoLaptops();
     }
 }

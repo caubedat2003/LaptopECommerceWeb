@@ -1,6 +1,7 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration
 @using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
                 Timeout="5"
@@ -59,6 +60,31 @@
                                 Liên hệ
                             </a>
                         </li>
+
+                        @* Hiển thị menu quản lý dựa trên vai trò *@
+                        @if (UserRole == "Admin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle baloo-bhaijaan-2" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ri-tools-line"></i>
+                                    Hệ thống
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item baloo-bhaijaan-2" href="/LaptopManagement">Quản lý sản phẩm</a></li>
+                                    <li><a class="dropdown-item baloo-bhaijaan-2" href="/UserList">Quản lý người dùng</a></li>
+                                    <li><a class="dropdown-item baloo-bhaijaan-2" href="/ManageOrders">Quản lý đơn hàng</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else if (UserRole == "Shipper")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link baloo-bhaijaan-2" href="/ShipperOrders">
+                                    <i class="ri-truck-line"></i>
+                                    Đơn hàng
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
 
@@ -86,3 +112,18 @@
         </article>
     </main>
 </div>
+
+@code{
+    private string UserRole;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            UserRole = user.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+        }
+    }
+}

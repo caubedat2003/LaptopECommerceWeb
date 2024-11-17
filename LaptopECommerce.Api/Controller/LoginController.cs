@@ -39,7 +39,8 @@ namespace LaptopECommerce.Api.Controller
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, login.UserName),
-                new Claim("UserId", user.Id.ToString())
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("Role", user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));

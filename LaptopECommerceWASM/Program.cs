@@ -19,10 +19,12 @@ namespace LaptopECommerceWASM
             builder.Services.AddTransient<ILaptopService, LaptopService>();
             builder.Services.AddTransient<IUserService, UserService>();
             builder.Services.AddTransient<IProcedureService, ProcedureService>();
+            builder.Services.AddTransient<IOrderService, OrderService>();
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<CartService>();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7001") });
 
             await builder.Build().RunAsync();

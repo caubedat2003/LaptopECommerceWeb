@@ -4,6 +4,8 @@
 @using LaptopECommerceWASM.Services
 @inject ILaptopService LaptopService
 @inject NavigationManager navigationManager
+@inject CartService CartService
+@inject IToastService toastService
 
 @if(Laptop == null)
 {
@@ -64,10 +66,10 @@ else
                             <h4 class="text-danger mt-4 baloo-bhaijaan-2 fw-bold">Giá: @CurrencyHelper.FormatCurrency(Laptop.Price)</h4>
 
                             <div class="mt-4">
-                                <button class="btn btn-outline-warning btn-lg me-3 baloo-bhaijaan-2">
+                                <button class="btn btn-outline-warning btn-lg me-3 baloo-bhaijaan-2" @onclick="AddToCart">
                                     <i class="fa fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
                                 </button>
-                                <button class="btn btn-danger btn-lg baloo-bhaijaan-2">
+                                <button class="btn btn-danger btn-lg baloo-bhaijaan-2" @onclick="BuyNow">
                                     <i class="fa fa-credit-card me-2"></i> Mua ngay
                                 </button>
                             </div>
@@ -92,5 +94,23 @@ else
     protected override async Task OnInitializedAsync()
     {
         Laptop = await LaptopService.GetLaptopDetail(Guid.Parse(LapId));
+    }
+    private void AddToCart()
+    {
+        CartService.AddToCart(new CartItem
+            {
+                LaptopId = Laptop.LaptopId,
+                Name = Laptop.Name,
+                Price = Laptop.Price,
+                ImageURL = Laptop.ImageURL,
+                Quantity = 1
+            });
+        toastService.ShowInfo($"Sản phẩm {Laptop.Name} đã thêm vào giỏ hàng.");
+    }
+
+    private void BuyNow()
+    {
+        AddToCart();
+        navigationManager.NavigateTo("/Cart");
     }
 }

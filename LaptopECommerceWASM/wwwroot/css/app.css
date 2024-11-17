@@ -363,6 +363,20 @@ code {
         color: white !important;
     }
 
+.red-btn-circle {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+    border-radius: 100%;
+}
+
+    .red-btn-circle:hover {
+        background-color: #e55361 !important; /* A lighter shade for hover */
+        border-color: #e55361 !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+        color: white !important;
+        border-radius: 100%;
+    }
 .m-right-1{
     margin-right: 1rem;
 }

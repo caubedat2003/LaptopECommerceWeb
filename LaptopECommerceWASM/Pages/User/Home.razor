@@ -3,6 +3,8 @@
 @using LaptopECommerce.Models
 @using LaptopECommerceWASM.Components
 @inject ILaptopService LaptopService
+@inject CartService CartService
+@inject IToastService toastService
 
 <div class="banner-home">
 </div>
@@ -40,7 +42,7 @@
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
                                         <div class="fw-bold">
-                                            <button class="btn btn-primary cart-btn">
+                                        <button class="btn btn-primary cart-btn" @onclick="AddToCart">
                                                 <i class="ri-shopping-cart-line"></i>
                                             </button>
                                             Thêm vào giỏ
@@ -60,9 +62,24 @@
 
 @code{
     private List<LaptopRequest> Laptops;
+    private LaptopRequest Laptop { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+    }
+
+    private void AddToCart()
+    {
+        CartService.AddToCart(new CartItem
+            {
+                LaptopId = Laptop.LaptopId,
+                Name = Laptop.Name,
+                Price = Laptop.Price,
+                ImageURL = Laptop.ImageURL,
+                Quantity = 1
+            });
+        Console.WriteLine($"{Laptop.Name} đã thêm vào giỏ hàng.");
+        toastService.ShowInfo($"Sản phẩm {Laptop.Name} đã thêm vào giỏ hàng.");
     }
 }

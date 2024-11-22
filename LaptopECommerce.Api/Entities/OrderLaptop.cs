@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace LaptopECommerce.Api.Entities
 {
@@ -7,18 +9,13 @@ namespace LaptopECommerce.Api.Entities
         [Key]
         public Guid OrderLaptopId { get; set; } // Primary key for this table
 
-        [Required]
         public Guid OrderId { get; set; } // Foreign key from the Order table
-        public Order Order { get; set; } // Navigation property to Order
-
-        [Required]
         public Guid LaptopId { get; set; } // Foreign key from the Laptop table
-        public Laptop Laptop { get; set; } // Navigation property to Laptop
-
-        [Required]
         public int Quantity { get; set; } // Quantity of this laptop in the order
-
-        [Required]
         public int Price { get; set; } // Price at the time of purchase
+        [JsonIgnore] // Để tránh vòng lặp tuần hoàn , Navigation properties
+        public virtual Order Order { get; set; }
+
+        public virtual Laptop Laptop { get; set; }
     }
 }

@@ -1,0 +1,119 @@
+﻿@page "/ManageOrders"
+@using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
+@using LaptopECommerceWASM.Components
+@using LaptopECommerceWASM.Services
+@using LaptopECommerceWASM.Pages.Admin
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IOrderService OrderService
+@inject IUserService UserService
+@inject IProcedureService ProcedureService
+@inject ILaptopService LaptopService
+@inject IConfiguration Configuration
+
+@if (Orders == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <h3 class="fw-bold">Danh sách đơn hàng</h3>
+    @foreach (var order in Orders)
+    {
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <h5 class="fw-bold mb-2">ID đơn hàng: @order.OrderId</h5>
+                    <div class="col-sm-7">
+                        <!-- Hiển thị danh sách laptop -->
+                        @foreach (var item in order.OrderLaptops)
+                        {
+                            <div class="row mb-1">
+                                <div class="col-sm-1">
+                                    <img src="/image/@item.Laptop.ImageURL" class="img-thumbnail" alt="@item.Laptop.Name" style="height:50px; object-fit:contain;" />
+                                </div>
+                                <div class="col-sm-11">
+                                    <p class="">@item.Laptop.Name (x @item.Quantity)</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+
+                    <!-- Tên người mua -->
+                    <div class="col-sm-1">
+                        <p>Người mua: @CustomerNames[order.CustomerId]</p>
+                    </div>
+
+                    <!-- ID Shipper -->
+                    <div class="col-sm-1">
+                        <p>Shipper: @(order.ShipperId.HasValue ? order.ShipperId.ToString() : "N/A")</p>
+                        <p><a style="cursor:pointer;" @onclick="()=>OpenAssignPopup(order.OrderId)">@order.ShipperId</a></p>
+                    </div>
+
+                    <!-- Ngày mua đơn hàng -->
+                    <div class="col-sm-1">
+                        <p>Ngày mua: @order.OrderDate.ToString(Configuration["DateTimeFormat"])</p>
+                    </div>
+
+                    <!-- Tổng giá trị đơn hàng -->
+                    <div class="col-sm-1">
+                        <p class="fw-bold text-primary">Tổng giá: @CurrencyHelper.FormatCurrency(order.TotalAmount)</p>
+                    </div>
+
+                    <!-- Trạng thái đơn hàng -->
+                    <div class="col-sm-1">
+                        @if (order.Status == Status.Pending)
+                        {
+                            <span class="badge bg-warning text-dark">Chưa xử lý</span>
+                        }
+                        else if (order.Status == Status.Approved)
+                        {
+                            <span class="badge bg-success">Đã duyệt</span>
+                        }
+                        else if (order.Status == Status.Rejected)
+                        {
+                            <span class="badge bg-danger">Không duyệt</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <OrderShipper @ref="AssignShipperDialog" CloseEventCallback="AssignShipperSuccess"></OrderShipper>
+}
+
+@code {
+    private List<OrderResponse> Orders;
+    private Dictionary<Guid, string> CustomerNames = new();
+    protected OrderShipper AssignShipperDialog { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Lấy danh sách đơn hàng từ API
+        Orders = await OrderService.GetOrderDetails();
+
+        foreach (var order in Orders)
+        {
+            if (!CustomerNames.ContainsKey(order.CustomerId))
+            {
+                var customer = await UserService.GetUserDetail(order.CustomerId);
+                CustomerNames[order.CustomerId] = $"{customer.LastName} {customer.FirstName}";
+            }
+        }
+    }
+
+    public void OpenAssignPopup(Guid Id)
+    {
+        AssignShipperDialog.Show(Id);
+    }
+    public async Task AssignShipperSuccess(bool result)
+    {
+        if (result)
+        {
+            Orders = await OrderService.GetOrderDetails();
+        }
+    }
+}

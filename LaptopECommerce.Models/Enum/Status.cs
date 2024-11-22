@@ -2,8 +2,8 @@
 {
     public enum Status
     {
-        ChuaXuLy = 0,
-        DaDuyet = 1,
-        KhongDuyet = 2
+        Pending = 0,
+        Approved = 1,
+        Rejected = 2
     }
 }

@@ -18,6 +18,7 @@ namespace LaptopECommerce.Api.Entities
         public int TotalAmount { get; set; }
 
         public Status Status { get; set; }
-        public ICollection<OrderLaptop> OrderLaptops { get; set; }
+        // Quan hệ 1-n với OrderLaptop
+        public virtual ICollection<OrderLaptop> OrderLaptops { get; set; }
     }
 }

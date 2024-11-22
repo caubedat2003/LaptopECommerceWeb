@@ -14,12 +14,22 @@ namespace LaptopECommerce.Api.Data
 
         public DbSet<Laptop> Laptops { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLaptop> OrderLaptops { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Define the one-to-many relationship
+            modelBuilder.Entity<Order>()
+            .HasMany(o => o.OrderLaptops)
+            .WithOne(ol => ol.Order)
+            .HasForeignKey(ol => ol.OrderId);
+
+            // Cấu hình quan hệ 1-n giữa Laptop và OrderLaptop
+            modelBuilder.Entity<Laptop>()
+                .HasMany(l => l.OrderLaptops)
+                .WithOne(ol => ol.Laptop)
+                .HasForeignKey(ol => ol.LaptopId);
         }
     }
 }

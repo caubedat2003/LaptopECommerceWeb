@@ -13,6 +13,7 @@ namespace LaptopECommerceWASM.Services
         Task<List<LaptopRequest>> GetDellLaptops();
         Task<List<LaptopRequest>> GetLenovoLaptops();
         Task<List<LaptopRequest>> GetAlienwareLaptops();
+        Task<List<UserDto>> GetShippers();
     }
     public class ProcedureService : IProcedureService
     {
@@ -59,6 +60,11 @@ namespace LaptopECommerceWASM.Services
         public async Task<List<LaptopRequest>> GetSamsungLaptops()
         {
             return await _httpClient.GetFromJsonAsync<List<LaptopRequest>>("api/Procedures/GetSamsungs");
+        }
+
+        public async Task<List<UserDto>> GetShippers()
+        {
+            return await _httpClient.GetFromJsonAsync<List<UserDto>>("api/Procedures/GetShippers");
         }
     }
 }

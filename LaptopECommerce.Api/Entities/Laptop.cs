@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LaptopECommerce.Api.Entities
 {
@@ -17,6 +18,8 @@ namespace LaptopECommerce.Api.Entities
         public int Price { get; set; }
         public string ImageURL { get; set; }
         public DateTime CreatedDate { get; set; }
-        public ICollection<OrderLaptop> OrderLaptops { get; set; }
+        // Quan hệ 1-n với OrderLaptop
+        [JsonIgnore] // Tránh vòng lặp khi liên kết với OrderLaptop
+        public virtual ICollection<OrderLaptop> OrderLaptops { get; set; }
     }
 }

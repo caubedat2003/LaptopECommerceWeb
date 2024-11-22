@@ -96,5 +96,14 @@ namespace LaptopECommerce.Api.Controller
             return Ok(laptops);
         }
 
+        [HttpGet]
+        [Route("GetShippers")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetShippers()
+        {
+            var users = await _context.Users
+                .FromSqlRaw("EXEC [dbo].[GetShippers]")
+                .ToListAsync();
+            return Ok(users);
+        }
     }
 }

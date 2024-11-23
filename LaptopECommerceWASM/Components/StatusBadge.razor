@@ -1,0 +1,19 @@
+﻿@using LaptopECommerce.Models.Enum
+
+@switch(Status)
+{
+    case Status.Pending:
+        <span class="badge bg-warning">@nameof(Status.Pending)</span>
+        break;
+    case Status.Approved:
+        <span class="badge bg-success">@nameof(Status.Approved)</span>
+        break;
+    case Status.Rejected:
+        <span class="badge bg-danger">@nameof(Status.Rejected)</span>
+        break;
+}
+
+@code {
+    [Parameter]
+    public Status Status { get; set; }
+}

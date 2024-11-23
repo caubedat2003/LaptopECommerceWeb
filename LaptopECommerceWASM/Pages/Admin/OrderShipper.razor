@@ -89,11 +89,11 @@
         {
             ShowDialog = false;
             await CloseEventCallback.InvokeAsync(true);
-            toastService.ShowSuccess("Assign user successfully");
+            toastService.ShowSuccess("Chỉ định giao hàng thành công!");
         }
         else
         {
-            toastService.ShowError("Assign task failed");
+            toastService.ShowError("Chỉ định giao hàng thất bại!");
         }
     }
 }

@@ -17,10 +17,15 @@ namespace LaptopECommerce.Api.Controller
         {
             _context = context;
         }
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetAll()
+        [HttpGet("Details")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderDetails()
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders
+                .Include(o => o.OrderLaptops) // Include OrderLaptops
+                .ThenInclude(ol => ol.Laptop) // Include Laptop for each OrderLaptop
+                .ToListAsync();
+
+            return Ok(orders);
         }
 
         [HttpPost]
@@ -51,17 +56,6 @@ namespace LaptopECommerce.Api.Controller
             await _context.SaveChangesAsync();
 
             return Ok(order.OrderId);
-        }
-
-        [HttpGet("Details")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrderDetails()
-        {
-            var orders = await _context.Orders
-                .Include(o => o.OrderLaptops) // Include OrderLaptops
-                .ThenInclude(ol => ol.Laptop) // Include Laptop for each OrderLaptop
-                .ToListAsync();
-
-            return Ok(orders);
         }
 
         [HttpPut]
@@ -108,5 +102,37 @@ namespace LaptopECommerce.Api.Controller
             }
             return Ok(order);
         }
+
+        [HttpPut]
+        [Route("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] StatusRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var orderFromDb = await _context.Orders.FindAsync(id);
+            if (orderFromDb == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng!");
+            }
+
+            // Cập nhật trạng thái
+            orderFromDb.Status = request.Status;
+
+            // Update các giá trị khác nếu cần giữ nguyên
+            orderFromDb.OrderId = orderFromDb.OrderId;
+            orderFromDb.OrderDate = orderFromDb.OrderDate;
+            orderFromDb.CustomerId = orderFromDb.CustomerId;
+            orderFromDb.TotalAmount = orderFromDb.TotalAmount;
+            orderFromDb.OrderLaptops = orderFromDb.OrderLaptops;
+
+            _context.Orders.Update(orderFromDb);
+            await _context.SaveChangesAsync();
+
+            return Ok(orderFromDb);
+        }
+
     }
 }

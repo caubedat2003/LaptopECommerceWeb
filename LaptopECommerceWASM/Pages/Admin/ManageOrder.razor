@@ -67,18 +67,9 @@ else
 
                     <!-- Trạng thái đơn hàng -->
                     <div class="col-sm-1">
-                        @if (order.Status == Status.Pending)
-                        {
-                            <span class="badge bg-warning text-dark">Chưa xử lý</span>
-                        }
-                        else if (order.Status == Status.Approved)
-                        {
-                            <span class="badge bg-success">Đã duyệt</span>
-                        }
-                        else if (order.Status == Status.Rejected)
-                        {
-                            <span class="badge bg-danger">Không duyệt</span>
-                        }
+                        <a style="cursor:pointer;" @onclick="()=>OpenStatusPopup(order.OrderId)">
+                            <StatusBadge Status="order.Status"></StatusBadge>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -86,13 +77,16 @@ else
     }
 
     <OrderShipper @ref="AssignShipperDialog" CloseEventCallback="AssignShipperSuccess"></OrderShipper>
+    <OrderStatus @ref="UpdateStatusDialog" CloseEventCallback="UpdateStatusSuccess"></OrderStatus>
 }
 
 @code {
     private List<OrderResponse> Orders;
     private Dictionary<Guid, string> CustomerNames = new(); // Thêm Dictionary để ánh xạ CustomerId sang tên customer
-    private OrderShipper AssignShipperDialog { get; set; }
     private Dictionary<Guid, string> ShipperNames = new(); // Thêm Dictionary để ánh xạ ShipperId sang tên shipper
+    private OrderShipper AssignShipperDialog { get; set; }
+    private OrderStatus UpdateStatusDialog { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -136,6 +130,18 @@ else
                     ShipperNames[order.ShipperId.Value] = $"{shipper.LastName} {shipper.FirstName}";
                 }
             }
+        }
+    }
+
+    public void OpenStatusPopup(Guid Id)
+    {
+        UpdateStatusDialog.Show(Id);
+    }
+    public async Task UpdateStatusSuccess(bool result)
+    {
+        if (result)
+        {
+            Orders = await OrderService.GetOrderDetails();
         }
     }
 }

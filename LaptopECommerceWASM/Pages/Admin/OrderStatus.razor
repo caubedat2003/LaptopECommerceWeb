@@ -1,0 +1,93 @@
+﻿@using LaptopECommerceWASM.Pages.Admin
+
+@using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
+@using LaptopECommerceWASM.Services
+@inject IToastService toastService
+@inject IOrderService OrderService
+@inject IUserService UserService
+@inject IProcedureService ProcedureService
+
+<div class="modal-overlay @(ShowDialog ? "show" : "")"></div>
+@if (ShowDialog)
+{
+<div class="modal fade show d-block" id="assignModel" tabindex="-1">
+    <div class="modal-dialog">
+        <EditForm Model="Model" OnSubmit="HandleAssignSubmit">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thay đổi trạng thái đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" @onclick="()=>Hide()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Chọn trạng thái của đơn hàng:</label>
+                        <InputSelect class="form-select" @bind-Value="Model.Status">
+                            <option value="0">----- Chọn trạng thái -----</option>
+                            @foreach (string status in Enum.GetNames(typeof(Status)))
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @onclick="()=>Hide()" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                    <button class="btn btn-success" type="submit">
+                        <i class="ri-save-3-line"></i>
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<bool> CloseEventCallback { get; set; }
+
+    private Guid OrderId;
+    protected bool ShowDialog { get; set; }
+    private StatusRequest Model { set; get; } = new StatusRequest();
+
+    public void Show(Guid orderId)
+    {
+        ShowDialog = true;
+        OrderId = orderId;
+        StateHasChanged();
+    }
+    private void Hide()
+    {
+        ShowDialog = false;
+        StateHasChanged();
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (OrderId != Guid.Empty)
+        {
+            var order = await OrderService.GetOrderById(OrderId);
+            Model.Status = order.Status;
+        }
+    }
+
+    protected async Task HandleAssignSubmit()
+    {
+        var result = await OrderService.UpdateStatus(OrderId, Model);
+        if (result)
+        {
+            ShowDialog = false;
+            await CloseEventCallback.InvokeAsync(true);
+            toastService.ShowSuccess("Cập nhật trạng thái đơn hàng thành công!");
+        }
+        else
+        {
+            toastService.ShowError("Cập nhật trạng thái đơn hàng thất bại!");
+        }
+    }
+}

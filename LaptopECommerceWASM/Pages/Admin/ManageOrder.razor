@@ -39,15 +39,19 @@ else
                             </div>
                         }
                     </div>
-                    
+
+                    <!-- Phương thức thanh toán -->
+                    <div class="col-sm-1">
+                        <p>Thanh toán: @order.PaymentMethod</p>
+                    </div>
 
                     <!-- Tên người mua -->
                     <div class="col-sm-2">
                         <p>Người mua: @CustomerNames[order.CustomerId]</p>
                     </div>
 
-                    <!-- ID Shipper -->
-                    <div class="col-sm-2">
+                    <!-- Tên Shipper -->
+                    <div class="col-sm-1">
                         <a style="cursor:pointer;" @onclick="()=>OpenAssignPopup(order.OrderId)">
                             Người giao: @(order.ShipperId.HasValue && ShipperNames.ContainsKey(order.ShipperId.Value)
                              ? ShipperNames[order.ShipperId.Value]

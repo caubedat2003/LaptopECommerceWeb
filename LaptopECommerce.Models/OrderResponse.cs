@@ -15,6 +15,7 @@ namespace LaptopECommerce.Models
         public DateTime OrderDate { get; set; }
         public int TotalAmount { get; set; }
         public Status Status { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
         public List<OrderLaptopResponse> OrderLaptops { get; set; }
     }
 

@@ -43,6 +43,7 @@ namespace LaptopECommerce.Api.Controller
                 OrderDate = DateTime.UtcNow,
                 TotalAmount = request.TotalAmount,
                 Status = Status.Pending,
+                PaymentMethod = request.PaymentMethod,
                 OrderLaptops = request.Items.Select(item => new OrderLaptop
                 {
                     OrderLaptopId = Guid.NewGuid(),

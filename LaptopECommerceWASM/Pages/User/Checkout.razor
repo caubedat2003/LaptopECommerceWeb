@@ -1,5 +1,6 @@
 ﻿@page "/Checkout"
 @using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
 @using LaptopECommerceWASM.Components
 @using Microsoft.AspNetCore.Components.Authorization
 @using LaptopECommerceWASM.Services
@@ -22,12 +23,33 @@
         }
         else
         {
-            <div class="card">
+            <div class="card mb-2">
                 <div class="card-body">
                     <p><strong>Họ tên:</strong> @($"{CurrentUser.LastName} {CurrentUser.FirstName}")</p>
                     <p><strong>Email:</strong> @CurrentUser.Email</p>
                     <p><strong>Số điện thoại:</strong> @CurrentUser.PhoneNumber</p>
                     <p><strong>Địa chỉ:</strong> @CurrentUser.Address</p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    @* Hiển thị checkbox thanh toán COD trực tiếp khi nhận hàng*@
+                    <div class="card text-center payment-option" style="cursor: pointer;" @onclick="() => SelectPaymentMethod(PaymentMethod.COD)">
+                        <div class="card-body">
+                            <h5 class="card-title">Thanh toán COD</h5>
+                            <p class="card-text">Trực tiếp khi nhận hàng</p>
+                            <i class="fa fa-truck fa-3x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    @* Hiển thị checkbox thanh toán online qua QR code *@
+                    <div class="card text-center payment-option" style="cursor: pointer;" @onclick="() => SelectPaymentMethod(PaymentMethod.QRCode)">
+                        <div class="card-body">
+                            <h5 class="card-title">Thanh toán online</h5>
+                            <img src="/image/QRCode.jpg" alt="QR Code" style="width: 100%; max-height: 300px; object-fit: contain;" />
+                        </div>
+                    </div>
                 </div>
             </div>
         }
@@ -45,7 +67,7 @@
                 <div class="card-body">
                     @foreach (var item in CartService.GetCartItems())
                     {
-                        <div class="row mb-2">
+                        <div class="row mb-3">
                             <div class="col-sm-2">
                                 <img src="/image/@item.ImageURL" alt="@item.Name" class="card-img-top" style="height:50px; object-fit:contain;" />
                             </div>
@@ -57,6 +79,22 @@
                             </div>
                         </div>
                     }
+                    <div class="d-flex align-items-center">
+                        <h6 class="fw-bold mb-0 me-2">Phương thức thanh toán:</h6>
+                        @if (SelectedPaymentMethod == PaymentMethod.COD)
+                        {
+                            <span>Thanh toán COD (trực tiếp khi nhận hàng)</span>
+                        }
+                        else if (SelectedPaymentMethod == PaymentMethod.QRCode)
+                        {
+                            <span>Thanh toán online qua QR Code</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Chưa chọn phương thức thanh toán.</span>
+                        }
+                    </div>
+
                     <hr />
                     <h5 class="text-danger fw-bold">Tổng tiền: @CartService.GetTotalAmount().ToString("N0")đ</h5>
                 </div>
@@ -74,7 +112,7 @@
 
 @code {
     private UserDto CurrentUser;
-
+    private PaymentMethod SelectedPaymentMethod = PaymentMethod.COD;
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,23 +124,27 @@
             var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var userId))
             {
-                Console.WriteLine($"UserId: {userId}");
                 CurrentUser = await UserService.GetUserDetail(userId);
             }
             else
             {
-                Console.WriteLine("Không thể tìm thấy UserId hoặc UserId không hợp lệ.");
+                toastService.ShowError("Không thể tìm thấy UserId hoặc UserId không hợp lệ.");
             }
         }
         else
         {
-            Console.WriteLine("Người dùng chưa đăng nhập.");
+            toastService.ShowError("Người dùng chưa đăng nhập.");
         }
     }
 
 
     private async Task ConfirmOrder()
     {
+        if (SelectedPaymentMethod == null)
+        {
+            toastService.ShowError("Vui lòng chọn phương thức thanh toán.");
+            return;
+        }
         var orderRequest = new OrderRequest
             {
                 CustomerId = CurrentUser.Id,
@@ -112,7 +154,8 @@
                     Quantity = item.Quantity,
                     Price = item.Price
                 }).ToList(),
-                TotalAmount = CartService.GetTotalAmount()
+                TotalAmount = CartService.GetTotalAmount(),
+                PaymentMethod = SelectedPaymentMethod
             };
 
         var response = await OrderService.CreateOrder(orderRequest);
@@ -127,5 +170,11 @@
         {
             toastService.ShowError("Đã xảy ra lỗi khi đặt hàng. Vui lòng liên hệ Admin");
         }
+    }
+
+    private void SelectPaymentMethod(PaymentMethod method)
+    {
+        SelectedPaymentMethod = method;
+        StateHasChanged();
     }
 }

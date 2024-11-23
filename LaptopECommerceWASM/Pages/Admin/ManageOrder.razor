@@ -25,15 +25,15 @@ else
             <div class="card-body">
                 <div class="row">
                     <h5 class="fw-bold mb-2">ID đơn hàng: @order.OrderId</h5>
-                    <div class="col-sm-7">
+                    <div class="col-sm-5">
                         <!-- Hiển thị danh sách laptop -->
                         @foreach (var item in order.OrderLaptops)
                         {
                             <div class="row mb-1">
-                                <div class="col-sm-1">
+                                <div class="col-sm-2">
                                     <img src="/image/@item.Laptop.ImageURL" class="img-thumbnail" alt="@item.Laptop.Name" style="height:50px; object-fit:contain;" />
                                 </div>
-                                <div class="col-sm-11">
+                                <div class="col-sm-10">
                                     <p class="">@item.Laptop.Name (x @item.Quantity)</p>
                                 </div>
                             </div>
@@ -42,14 +42,17 @@ else
                     
 
                     <!-- Tên người mua -->
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <p>Người mua: @CustomerNames[order.CustomerId]</p>
                     </div>
 
                     <!-- ID Shipper -->
-                    <div class="col-sm-1">
-                        <p>Shipper: @(order.ShipperId.HasValue ? order.ShipperId.ToString() : "N/A")</p>
-                        <p><a style="cursor:pointer;" @onclick="()=>OpenAssignPopup(order.OrderId)">@order.ShipperId</a></p>
+                    <div class="col-sm-2">
+                        <a style="cursor:pointer;" @onclick="()=>OpenAssignPopup(order.OrderId)">
+                            Người giao: @(order.ShipperId.HasValue && ShipperNames.ContainsKey(order.ShipperId.Value)
+                             ? ShipperNames[order.ShipperId.Value]
+                             : "N/A")
+                        </a>
                     </div>
 
                     <!-- Ngày mua đơn hàng -->
@@ -87,8 +90,9 @@ else
 
 @code {
     private List<OrderResponse> Orders;
-    private Dictionary<Guid, string> CustomerNames = new();
+    private Dictionary<Guid, string> CustomerNames = new(); // Thêm Dictionary để ánh xạ CustomerId sang tên customer
     private OrderShipper AssignShipperDialog { get; set; }
+    private Dictionary<Guid, string> ShipperNames = new(); // Thêm Dictionary để ánh xạ ShipperId sang tên shipper
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,10 +101,18 @@ else
 
         foreach (var order in Orders)
         {
+            // Ánh xạ CustomerId sang tên khách hàng
             if (!CustomerNames.ContainsKey(order.CustomerId))
             {
                 var customer = await UserService.GetUserDetail(order.CustomerId);
                 CustomerNames[order.CustomerId] = $"{customer.LastName} {customer.FirstName}";
+            }
+
+            // Ánh xạ ShipperId sang tên shipper (nếu có)
+            if (order.ShipperId.HasValue && !ShipperNames.ContainsKey(order.ShipperId.Value))
+            {
+                var shipper = await UserService.GetUserDetail(order.ShipperId.Value);
+                ShipperNames[order.ShipperId.Value] = $"{shipper.LastName} {shipper.FirstName}";
             }
         }
     }
@@ -114,6 +126,16 @@ else
         if (result)
         {
             Orders = await OrderService.GetOrderDetails();
+
+            foreach (var order in Orders)
+            {
+                // Cập nhật lại tên shipper sau khi gán
+                if (order.ShipperId.HasValue && !ShipperNames.ContainsKey(order.ShipperId.Value))
+                {
+                    var shipper = await UserService.GetUserDetail(order.ShipperId.Value);
+                    ShipperNames[order.ShipperId.Value] = $"{shipper.LastName} {shipper.FirstName}";
+                }
+            }
         }
     }
 }

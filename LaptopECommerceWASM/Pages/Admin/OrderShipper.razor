@@ -23,8 +23,8 @@
 
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Chọn một shipper để giao đơn hàng:</label>
-                            <InputSelect class="form-control" @bind-Value="Model.UserId">
-                                <option value="@Guid.Empty">Select an user</option>
+                            <InputSelect class="form-select" @bind-Value="Model.UserId">
+                                <option value="@Guid.Empty">----- Chọn một shipper -----</option>
                                 @foreach (var assignee in Shippers)
                                 {
                                     <option value="@assignee.Id">@assignee.LastName @assignee.FirstName</option>

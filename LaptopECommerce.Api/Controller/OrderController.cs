@@ -92,5 +92,21 @@ namespace LaptopECommerce.Api.Controller
 
             return Ok(orderFromDb);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderLaptops) // Bao gồm OrderLaptops
+                .ThenInclude(ol => ol.Laptop) // Bao gồm Laptop từ OrderLaptops
+                .FirstOrDefaultAsync(o => o.OrderId == id); // Tìm đơn hàng theo ID
+
+            if ( order == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng!");
+            }
+            return Ok(order);
+        }
     }
 }

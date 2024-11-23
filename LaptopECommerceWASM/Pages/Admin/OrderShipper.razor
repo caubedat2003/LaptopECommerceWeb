@@ -1,4 +1,6 @@
-﻿@using LaptopECommerce.Models
+﻿@using LaptopECommerceWASM.Pages.Admin
+
+@using LaptopECommerce.Models
 @using LaptopECommerceWASM.Services
 @inject IToastService toastService
 @inject IOrderService OrderService
@@ -23,9 +25,9 @@
                             <label for="recipient-name" class="col-form-label">Chọn một shipper để giao đơn hàng:</label>
                             <InputSelect class="form-control" @bind-Value="Model.UserId">
                                 <option value="@Guid.Empty">Select an user</option>
-                                @foreach (var assignee in Assignees)
+                                @foreach (var assignee in Shippers)
                                 {
-                                    <option value="@assignee.Id">@assignee.FullName</option>
+                                    <option value="@assignee.Id">@assignee.LastName @assignee.FirstName</option>
                                 }
                             </InputSelect>
                         </div>
@@ -75,8 +77,8 @@
     {
         if (OrderId != Guid.Empty)
         {
-            var order = await OrderService.GetOrderDetail(TaskId.ToString());
-            Model.UserId = task.AssigneeId;
+            var order = await OrderService.GetOrderById(OrderId);
+            Model.UserId = order.ShipperId;
         }
     }
 

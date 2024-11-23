@@ -88,7 +88,7 @@ else
 @code {
     private List<OrderResponse> Orders;
     private Dictionary<Guid, string> CustomerNames = new();
-    protected OrderShipper AssignShipperDialog { get; set; }
+    private OrderShipper AssignShipperDialog { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

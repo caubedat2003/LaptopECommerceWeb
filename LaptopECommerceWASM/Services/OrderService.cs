@@ -9,6 +9,7 @@ namespace LaptopECommerceWASM.Services
         Task<bool> CreateOrder (OrderRequest request);
         Task<List<OrderResponse>> GetOrderDetails();
         Task<bool> AssignShipper (Guid id, AssignShipperRequest request);
+        Task<OrderResponse> GetOrderById (Guid id);
     }
     public class OrderService : IOrderService
     {
@@ -28,6 +29,12 @@ namespace LaptopECommerceWASM.Services
         {
             var result = await _httpClient.PostAsJsonAsync("api/order", request);
             return result.IsSuccessStatusCode;
+        }
+
+        public async Task<OrderResponse> GetOrderById(Guid id)
+        {
+            var result = await _httpClient.GetFromJsonAsync<OrderResponse>($"/api/Order/{id}");
+            return result;
         }
 
         public async Task<List<OrderResponse>> GetOrderDetails()

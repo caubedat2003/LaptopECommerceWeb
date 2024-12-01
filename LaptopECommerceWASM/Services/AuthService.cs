@@ -12,6 +12,7 @@ namespace LaptopECommerceWASM.Services
         Task<LoginResponse> Login(LoginRequest loginRequest);
         Task Logout();
         Task<RegisterResponse> Register(RegisterRequest registerRequest);
+        Task<RegisterResponse> ChangePassword(Guid id , ChangePasswordRequest request);
     }
     public class AuthService : IAuthService
     {
@@ -62,6 +63,27 @@ namespace LaptopECommerceWASM.Services
                     PropertyNameCaseInsensitive = true,
                 });
             return registerResponse;
+        }
+
+        public async Task<RegisterResponse> ChangePassword(Guid userId, ChangePasswordRequest request)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"/api/User/change-password/{userId}", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Thành công, trả về phản hồi
+                return await response.Content.ReadFromJsonAsync<RegisterResponse>();
+            }
+            else
+            {
+                // Lấy lỗi từ phản hồi
+                var errorResponse = await response.Content.ReadFromJsonAsync<RegisterResponse>();
+                return errorResponse ?? new RegisterResponse
+                {
+                    Successful = false,
+                    Errors = new[] { "Không thể đổi mật khẩu. Lỗi không xác định." }
+                };
+            }
         }
     }
 }

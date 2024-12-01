@@ -96,6 +96,7 @@ namespace LaptopECommerce.Api.Controller
             userFromDb.PhoneNumber = request.PhoneNumber;
             userFromDb.Role = request.Role;
             userFromDb.DateOfBirth = request.DateOfBirth;
+            userFromDb.UserName = request.UserName;
             if (request.isChangePass == true)
             {
                 userFromDb.PasswordHash = _userManager.PasswordHasher.HashPassword(userFromDb, request.Password);
@@ -123,5 +124,88 @@ namespace LaptopECommerce.Api.Controller
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpPut("account/{id}")]
+        public async Task<IActionResult> UserEdit(Guid id, [FromBody] UserEditRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userFromDb = await _context.Users.FindAsync(id);
+
+            if (userFromDb == null)
+            {
+                return NotFound();
+            }
+
+            userFromDb.FirstName = request.FirstName;
+            userFromDb.LastName = request.LastName;
+            userFromDb.Email = request.Email;
+            userFromDb.Gender = request.Gender;
+            userFromDb.Address = request.Address;
+            userFromDb.PhoneNumber = request.PhoneNumber;
+            userFromDb.DateOfBirth = request.DateOfBirth;
+            userFromDb.UserName = request.UserName;
+
+            _context.Users.Update(userFromDb);
+            await _context.SaveChangesAsync();
+
+            return Ok(userFromDb);
+        }
+
+        [HttpPost("change-password/{id}")]
+        public async Task<IActionResult> ChangePassword(Guid id, [FromBody] ChangePasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new RegisterResponse
+                {
+                    Successful = false,
+                    Errors = ModelState.Values.SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
+                });
+            }
+
+            // Tìm người dùng trong database
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound(new RegisterResponse
+                {
+                    Successful = false,
+                    Errors = new List<string> { "Người dùng không tồn tại." }
+                });
+            }
+
+            // Kiểm tra mật khẩu cũ
+            var isOldPasswordValid = await _userManager.CheckPasswordAsync(user, request.OldPassword);
+            if (!isOldPasswordValid)
+            {
+                return BadRequest(new RegisterResponse
+                {
+                    Successful = false,
+                    Errors = new List<string> { "Mật khẩu cũ không chính xác." }
+                });
+            }
+
+            // Đổi mật khẩu
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new RegisterResponse
+                {
+                    Successful = false,
+                    Errors = result.Errors.Select(e => e.Description)
+                });
+            }
+
+            return Ok(new RegisterResponse
+            {
+                Successful = true,
+                Errors = new List<string> { "Đổi mật khẩu thành công." }
+            });
+        }
+
     }
 }

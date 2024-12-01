@@ -11,7 +11,7 @@ namespace LaptopECommerceWASM.Services
         Task<RegisterResponse> Create(UserDto request);
         Task<bool> Update(Guid id, UserDto request);
         Task<bool> Delete(Guid id);
-
+        Task<bool> UserEdit(Guid id, UserEditRequest request);
     }
     public class UserService : IUserService
     {
@@ -53,6 +53,12 @@ namespace LaptopECommerceWASM.Services
         public async Task<bool> Update(Guid id, UserDto request)
         {
             var result = await _httpClient.PutAsJsonAsync($"/api/User/{id}", request);
+            return result.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UserEdit(Guid id, UserEditRequest request)
+        {
+            var result = await _httpClient.PutAsJsonAsync($"/api/User/account/{id}", request);
             return result.IsSuccessStatusCode;
         }
     }

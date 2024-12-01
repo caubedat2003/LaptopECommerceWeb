@@ -579,3 +579,13 @@ code {
     align-items: center;
     text-align: center;
 }
+.dark-green-btn {
+    background-color: #517988 !important;
+    border-color: #517988 !important;
+}
+
+    .dark-green-btn:hover {
+        background-color: #43646f !important; /* Darker green-blue */
+        border-color: #43646f !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }

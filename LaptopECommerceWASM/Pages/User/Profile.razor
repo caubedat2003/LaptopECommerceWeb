@@ -53,6 +53,16 @@ else
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-center gap-2 mt-1">
+                            <a href="/AccountUpdate/@UserId" class="btn btn-primary light-green-btn">
+                                <i class="ri-pencil-fill"></i>
+                                Cập nhật thông tin
+                            </a>
+                            <a href="/ChangePassword/@UserId" class="btn btn-primary dark-green-btn">
+                                <i class="ri-key-2-fill"></i>
+                                Đổi mật khẩu
+                            </a>
+                        </div>
                     </div>
 
                     <div class="col-md-8">
@@ -224,8 +234,6 @@ else
                 var customer = await UserApiClient.GetUserDetail(order.CustomerId);
                 CustomerNames[order.CustomerId] = $"{customer.LastName} {customer.FirstName}";
             }
-
-            // Ánh xạ ShipperId sang tên shipper (nếu có)
             if (order.ShipperId.HasValue && !ShipperNames.ContainsKey(order.ShipperId.Value))
             {
                 var shipper = await UserApiClient.GetUserDetail(order.ShipperId.Value);

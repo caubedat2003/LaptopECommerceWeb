@@ -16,7 +16,6 @@ namespace LaptopECommerce.Api.Entities
         public string Role {  get; set; }
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        [MaxLength(200)]
         public string Address { get; set; }
     }
 }

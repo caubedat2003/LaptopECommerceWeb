@@ -1,0 +1,236 @@
+﻿@page "/Profile/{UserId}"
+@using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
+@using LaptopECommerceWASM.Services
+@using LaptopECommerceWASM.Components
+@inject IUserService UserApiClient
+@inject IConfiguration Configuration
+@inject IOrderService OrderService
+
+@if(User == null)
+{
+    <LoadingIndicator />
+}
+else
+{
+    <div>
+        <h3 class="fw-bold mb-2">Tài khoản của bạn</h3>
+        <nav class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="ProfileTab" data-bs-toggle="tab" data-bs-target="#Profile" type="button"
+                    aria-controls="Profile" aria-selected="true">
+                Thông tin cá nhân
+            </button>
+            <button class="nav-link" id="MyOrderTab" data-bs-toggle="tab" data-bs-target="#MyOrder" type="button"
+                    aria-controls="MyOrder" aria-selected="false">
+                Danh sách đơn hàng
+            </button>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+            
+            <div class="tab-pane fade show active" id="Profile" role="tabpanel" aria-labelledby="ProfileTab">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm mb-2">
+                            <div class="card-body">
+                                <div class="card-user">
+                                    @if (@User.Gender.Equals(LaptopECommerce.Models.Enum.Gender.Nam))
+                                    {
+                                        <img src="/image/avatar-male.png" class="rounded-circle" width="150" alt="User Logo" />
+                                    }
+                                    else if (@User.Gender.Equals(LaptopECommerce.Models.Enum.Gender.Nữ))
+                                    {
+                                        <img src="/image/avatarFemale.png" class="rounded-circle" width="150" alt="User Logo" />
+                                    }
+                                    else
+                                    {
+                                        <img src="/image/avatar.jpg" class="rounded-circle" width="150" alt="User Logo" />
+                                    }
+                                    <div class="mt-3">
+                                        <h4>@($"{User.LastName} {User.FirstName}")</h4>
+                                        <p>ID người dùng: @User.Id</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card shadow-sm mb-2">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Họ tên</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @($"{User.LastName} {User.FirstName}")
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Số điện thoại</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.PhoneNumber
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Email</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.Email
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Ngày sinh</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.DateOfBirth.ToString(Configuration["DateOnlyFormat"])
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Giới tính</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.Gender
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Tên đăng nhập</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.UserName
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Vai trò</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.Role
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h6 class="mb-0">Địa chỉ</h6>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        @User.Address
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="MyOrder" role="tabpanel" aria-labelledby="MyOrderTab">
+                <h4 class="fw-bold mt-2">Các đơn hàng đã mua</h4>
+                @foreach (var order in Orders)
+                {
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="row">
+                                <h5 class="fw-bold mb-2">ID đơn hàng: @order.OrderId</h5>
+                                <div class="col-sm-5">
+                                    <!-- Hiển thị danh sách laptop -->
+                                    @foreach (var item in order.OrderLaptops)
+                                    {
+                                        <div class="row mb-1">
+                                            <div class="col-sm-2">
+                                                <img src="/image/@item.Laptop.ImageURL" class="img-thumbnail" alt="@item.Laptop.Name" style="height:50px; object-fit:contain;" />
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <p class="">@item.Laptop.Name (x @item.Quantity)</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <!-- Phương thức thanh toán -->
+                                <div class="col-sm-1">
+                                    <p>Thanh toán: @order.PaymentMethod</p>
+                                </div>
+
+                                <!-- Tên người mua -->
+                                <div class="col-sm-2">
+                                    <p>Người mua: @CustomerNames[order.CustomerId]</p>
+                                </div>
+
+                                <!-- Tên Shipper -->
+                                <div class="col-sm-1">
+                                    <a>
+                                        Người giao: @(order.ShipperId.HasValue && ShipperNames.ContainsKey(order.ShipperId.Value)
+                                ? ShipperNames[order.ShipperId.Value]
+                                : "N/A")
+                                    </a>
+                                </div>
+
+                                <!-- Ngày mua đơn hàng -->
+                                <div class="col-sm-1">
+                                    <p>Ngày mua: @order.OrderDate.ToString(Configuration["DateTimeFormat"])</p>
+                                </div>
+
+                                <!-- Tổng giá trị đơn hàng -->
+                                <div class="col-sm-1">
+                                    <p class="fw-bold text-primary">Tổng giá: @CurrencyHelper.FormatCurrency(order.TotalAmount)</p>
+                                </div>
+
+                                <!-- Trạng thái đơn hàng -->
+                                <div class="col-sm-1">
+                                    <a>
+                                        <StatusBadge Status="order.Status"></StatusBadge>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string UserId { get; set; }
+
+    private UserDto User;
+    private List<OrderResponse> Orders;
+    private Dictionary<Guid, string> CustomerNames = new();
+    private Dictionary<Guid, string> ShipperNames = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await UserApiClient.GetUserDetail(Guid.Parse(UserId));
+        Orders = await OrderService.GetMyOrder(Guid.Parse(UserId));
+
+        foreach (var order in Orders)
+        {
+            if (!CustomerNames.ContainsKey(order.CustomerId))
+            {
+                var customer = await UserApiClient.GetUserDetail(order.CustomerId);
+                CustomerNames[order.CustomerId] = $"{customer.LastName} {customer.FirstName}";
+            }
+
+            // Ánh xạ ShipperId sang tên shipper (nếu có)
+            if (order.ShipperId.HasValue && !ShipperNames.ContainsKey(order.ShipperId.Value))
+            {
+                var shipper = await UserApiClient.GetUserDetail(order.ShipperId.Value);
+                ShipperNames[order.ShipperId.Value] = $"{shipper.LastName} {shipper.FirstName}";
+            }
+        }
+    }
+}

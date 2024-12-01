@@ -92,7 +92,10 @@
                 <AuthorizeView>
                     <Authorized>
                         <div class="d-flex">
-                            <span class="navbar-text me-3">Chào mừng, @context.User.Identity.Name</span>
+                            <a href="/Profile/@UserId" class="navbar-text me-3" style="text-decoration:none;">
+                                <i class="ri-user-line"></i>
+                                <span>@context.User.Identity.Name</span>
+                            </a>
                             <a href="/logout" class="btn btn-outline-secondary ">Đăng xuất</a>
                         </div>
                     </Authorized>
@@ -115,6 +118,7 @@
 
 @code{
     private string UserRole;
+    private string UserId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -124,6 +128,7 @@
         if (user.Identity.IsAuthenticated)
         {
             UserRole = user.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            UserId = user.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
         }
     }
 }

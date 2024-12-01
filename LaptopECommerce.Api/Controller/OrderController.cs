@@ -134,6 +134,22 @@ namespace LaptopECommerce.Api.Controller
 
             return Ok(orderFromDb);
         }
+        [HttpGet("MyOrder/{userId}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrderByUser(Guid userId)
+        {
+            var orders = await _context.Orders
+                .Where(o => o.CustomerId == userId) // Lọc theo UserId
+                .Include(o => o.OrderLaptops) // Include OrderLaptops
+                .ThenInclude(ol => ol.Laptop) // Include Laptop cho từng OrderLaptop
+                .ToListAsync();
+
+            if (orders == null || !orders.Any())
+            {
+                return NotFound($"Không tìm thấy đơn hàng nào cho UserId: {userId}");
+            }
+
+            return Ok(orders);
+        }
 
     }
 }

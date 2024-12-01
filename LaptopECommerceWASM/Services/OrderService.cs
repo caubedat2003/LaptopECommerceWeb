@@ -11,6 +11,7 @@ namespace LaptopECommerceWASM.Services
         Task<bool> AssignShipper (Guid id, AssignShipperRequest request);
         Task<OrderResponse> GetOrderById (Guid id);
         Task<bool> UpdateStatus(Guid id, StatusRequest request);
+        Task<List<OrderResponse>> GetMyOrder(Guid id);
     }
     public class OrderService : IOrderService
     {
@@ -30,6 +31,21 @@ namespace LaptopECommerceWASM.Services
         {
             var result = await _httpClient.PostAsJsonAsync("api/order", request);
             return result.IsSuccessStatusCode;
+        }
+
+        public async Task<List<OrderResponse>> GetMyOrder(Guid id) // Customer Id
+        {
+            try
+            {
+                var result = await _httpClient.GetFromJsonAsync<List<OrderResponse>>($"/api/Order/MyOrder/{id}");
+
+                return result ?? new List<OrderResponse>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi khi gọi API: {ex.Message}");
+                return new List<OrderResponse>(); 
+            }
         }
 
         public async Task<OrderResponse> GetOrderById(Guid id)

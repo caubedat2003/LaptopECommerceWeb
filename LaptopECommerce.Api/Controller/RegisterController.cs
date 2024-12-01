@@ -32,7 +32,12 @@ namespace LaptopECommerce.Api.Controller
                 UserName = request.UserName,
                 Email = request.Email,
                 FirstName = request.FirstName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                Role = "Customer",
+                Gender = request.Gender,
+                Address = request.Address,
+                DateOfBirth = request.DateOfBirth,
+                PhoneNumber = request.PhoneNumber,
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)

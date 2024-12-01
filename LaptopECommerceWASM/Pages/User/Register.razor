@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using LaptopECommerce.Models
+@using LaptopECommerce.Models.Enum
 @using LaptopECommerceWASM.Services
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
@@ -67,6 +68,68 @@
                     </div>
                 </div>
                 <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-5">
+                        <label for="Name">Ngày sinh</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="dateofbirth">
+                                <i class="ri-calendar-2-fill"></i>
+                            </span>
+                            <InputDate TValue="DateTime" class="form-control"
+                                       aria-describedby="dateofbirth"
+                                       placeholder="Ngày sinh"
+                                       @bind-Value="registerModel.DateOfBirth" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.DateOfBirth"></ValidationMessage>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label for="Name">Giới tính</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="gender">
+                                <i class="fa fa-venus-mars"></i>
+                            </span>
+                            <InputSelect class="form-select" aria-describedby="gender" placeholder="Giới tính" @bind-Value="registerModel.Gender">
+                                @foreach (string item in Enum.GetNames(typeof(Gender)))
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.Gender"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <label for="username">Số điện thoại</label>
+                        <div class="input-group"> 
+                            <span class="input-group-text" id="phonenumber">
+                                <i class="ri-phone-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="phonenumber" placeholder="Số điện thoại" @bind-value="registerModel.PhoneNumber" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.PhoneNumber"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-sm-10">
+                        <label for="username">Địa chỉ</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="address">
+                                <i class="ri-map-pin-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" aria-describedby="address" placeholder="Địa chỉ" @bind-value="registerModel.Address" />
+                        </div>
+                        <div class="valid-message">
+                            <ValidationMessage For="()=> registerModel.Address"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 justify-content-center">
                     <div class="col-sm-10">
                         <label for="username">Tên tài khoản</label>
                         <div class="input-group">
@@ -111,7 +174,10 @@
 </div>
 
 @code {
-    private RegisterRequest registerModel = new RegisterRequest();
+    private RegisterRequest registerModel = new RegisterRequest
+        {
+            DateOfBirth = DateTime.Now
+        };
     private bool ShowErrors;
     private List<string> Errors = new List<string>();
     private ElementReference passwordInput;

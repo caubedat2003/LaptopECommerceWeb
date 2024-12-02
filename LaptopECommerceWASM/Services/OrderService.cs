@@ -12,6 +12,7 @@ namespace LaptopECommerceWASM.Services
         Task<OrderResponse> GetOrderById (Guid id);
         Task<bool> UpdateStatus(Guid id, StatusRequest request);
         Task<List<OrderResponse>> GetMyOrder(Guid id);
+        Task<List<OrderResponse>> GetDelivery(Guid id);
     }
     public class OrderService : IOrderService
     {
@@ -33,6 +34,20 @@ namespace LaptopECommerceWASM.Services
             return result.IsSuccessStatusCode;
         }
 
+        public async Task<List<OrderResponse>> GetDelivery(Guid id)
+        {
+            try
+            {
+                var result = await _httpClient.GetFromJsonAsync<List<OrderResponse>>($"/api/Order/Delivery/{id}");
+
+                return result ?? new List<OrderResponse>();
+            }
+            catch (Exception ex)
+            {
+                return new List<OrderResponse>();
+            }
+        }
+
         public async Task<List<OrderResponse>> GetMyOrder(Guid id) // Customer Id
         {
             try
@@ -43,7 +58,6 @@ namespace LaptopECommerceWASM.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi khi gọi API: {ex.Message}");
                 return new List<OrderResponse>(); 
             }
         }

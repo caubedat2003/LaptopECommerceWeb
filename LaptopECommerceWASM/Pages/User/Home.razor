@@ -42,7 +42,7 @@
                                             @CurrencyHelper.FormatCurrency(item.Price)
                                         </p>
                                         <div class="fw-bold">
-                                        <button class="btn btn-primary cart-btn" @onclick="AddToCart">
+                                        <button class="btn btn-primary cart-btn" @onclick="() => AddToCart(item)">
                                                 <i class="ri-shopping-cart-line"></i>
                                             </button>
                                             Thêm vào giỏ
@@ -66,20 +66,24 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Laptops = await LaptopService.GetLaptops(); // Call this to get all laptops
+        Laptops = await LaptopService.GetLaptops();
     }
 
-    private void AddToCart()
+    private void AddToCart(LaptopRequest laptop)
     {
+        if (laptop == null)
+        {
+            toastService.ShowError("Không thể thêm sản phẩm vào giỏ hàng!");
+            return;
+        }
         CartService.AddToCart(new CartItem
             {
-                LaptopId = Laptop.LaptopId,
-                Name = Laptop.Name,
-                Price = Laptop.Price,
-                ImageURL = Laptop.ImageURL,
+                LaptopId = laptop.LaptopId,
+                Name = laptop.Name,
+                Price = laptop.Price,
+                ImageURL = laptop.ImageURL,
                 Quantity = 1
             });
-        Console.WriteLine($"{Laptop.Name} đã thêm vào giỏ hàng.");
-        toastService.ShowInfo($"Sản phẩm {Laptop.Name} đã thêm vào giỏ hàng.");
+        toastService.ShowInfo($"Sản phẩm {laptop.Name} đã thêm vào giỏ hàng.");
     }
 }

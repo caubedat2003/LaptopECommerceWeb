@@ -102,5 +102,20 @@ namespace LaptopECommerce.Api.Controller
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<Laptop>>> SearchLaptops([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return await _context.Laptops.ToListAsync(); // Nếu không có từ khóa, trả về toàn bộ danh sách.
+            }
+
+            var laptops = await _context.Laptops
+                .Where(l => l.Name.Contains(name)) // Tìm laptop có tên chứa từ khóa
+                .ToListAsync();
+
+            return laptops;
+        }
     }
 }

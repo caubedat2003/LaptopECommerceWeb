@@ -589,3 +589,13 @@ code {
         border-color: #43646f !important;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
+.purpil-btn {
+    background-color: #9329b7 !important;
+    border-color: #9329b7 !important;
+}
+
+    .purpil-btn:hover {
+        background-color: #a944cc !important; /* Bright orchid */
+        border-color: #a944cc !important;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }

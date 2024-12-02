@@ -10,6 +10,7 @@ namespace LaptopECommerceWASM.Services
         Task<bool> CreateLaptop(LaptopRequest request);
         Task<bool> UpdateLaptop(Guid id, LaptopRequest request);
         Task<bool> DeleteLaptop(Guid id);
+        Task<List<LaptopRequest>> SearchLaptops(string name);
     }
     public class LaptopService : ILaptopService
     {
@@ -41,6 +42,16 @@ namespace LaptopECommerceWASM.Services
         {
             var result = await _httpClient.GetFromJsonAsync<List<LaptopRequest>>("/api/Laptop");
             return result;
+        }
+
+        public async Task<List<LaptopRequest>> SearchLaptops(string name)
+        {
+            var response = await _httpClient.GetAsync($"api/Laptop/search?name={name}");
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<List<LaptopRequest>>();
+            }
+            return new List<LaptopRequest>();
         }
 
         public async Task<bool> UpdateLaptop(Guid id, LaptopRequest request)

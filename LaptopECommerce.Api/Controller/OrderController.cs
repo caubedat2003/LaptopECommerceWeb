@@ -20,7 +20,7 @@ namespace LaptopECommerce.Api.Controller
         [HttpGet("Details")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderDetails()
         {
-            var orders = await _context.Orders
+            var orders = await _context.Orders.OrderByDescending(x => x.OrderDate)
                 .Include(o => o.OrderLaptops) // Include OrderLaptops
                 .ThenInclude(ol => ol.Laptop) // Include Laptop for each OrderLaptop
                 .ToListAsync();
@@ -92,7 +92,7 @@ namespace LaptopECommerce.Api.Controller
         [Route("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var order = await _context.Orders
+            var order = await _context.Orders.OrderByDescending(x => x.OrderDate)
                 .Include(o => o.OrderLaptops) // Bao gồm OrderLaptops
                 .ThenInclude(ol => ol.Laptop) // Bao gồm Laptop từ OrderLaptops
                 .FirstOrDefaultAsync(o => o.OrderId == id); // Tìm đơn hàng theo ID
@@ -137,7 +137,7 @@ namespace LaptopECommerce.Api.Controller
         [HttpGet("MyOrder/{userId}")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderByUser(Guid userId)
         {
-            var orders = await _context.Orders
+            var orders = await _context.Orders.OrderByDescending(x => x.OrderDate)
                 .Where(o => o.CustomerId == userId) // Lọc theo UserId
                 .Include(o => o.OrderLaptops) // Include OrderLaptops
                 .ThenInclude(ol => ol.Laptop) // Include Laptop cho từng OrderLaptop
@@ -154,7 +154,7 @@ namespace LaptopECommerce.Api.Controller
         [HttpGet("Delivery/{userId}")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrderDelivery(Guid userId)
         {
-            var orders = await _context.Orders
+            var orders = await _context.Orders.OrderByDescending(x => x.OrderDate)
                 .Where(o => o.ShipperId == userId) // Lọc theo UserId
                 .Include(o => o.OrderLaptops) // Include OrderLaptops
                 .ThenInclude(ol => ol.Laptop) // Include Laptop cho từng OrderLaptop

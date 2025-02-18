@@ -599,3 +599,25 @@ code {
         border-color: #a944cc !important;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
+
+.red-badge {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: white;
+    border: 2px solid white; 
+    z-index: 10;
+}
+
+.card-home:hover {
+    transform: scale(1.05); /* Phóng to toàn bộ card */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng mượt */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+    .card-home:hover img {
+        transform: scale(1.1); /* Phóng to hình ảnh */
+        transition: transform 0.3s ease-in-out; /* Hiệu ứng mượt */
+    }

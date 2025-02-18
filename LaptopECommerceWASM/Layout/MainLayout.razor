@@ -1,7 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration
 @using Microsoft.AspNetCore.Components.Authorization
+@using LaptopECommerceWASM.Services
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject CartService CartService
+
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
                 Timeout="5"
@@ -48,12 +51,19 @@
                                 <li><a class="dropdown-item baloo-bhaijaan-2" href="/BrandDell">Dell</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item position-relative">
                             <a class="nav-link baloo-bhaijaan-2" href="/Cart">
                                 <i class="ri-shopping-cart-2-line"></i>
                                 Giỏ hàng
+                                @if (CartItemCount > 0)
+                                {
+                                    <span class="red-badge rounded-circle bg-danger position-absolute top-0 start-100 translate-middle mt-2">
+                                        @CartItemCount
+                                    </span>
+                                }
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link baloo-bhaijaan-2" href="/Contact">
                                 <i class="ri-customer-service-line"></i>
@@ -119,6 +129,7 @@
 @code{
     private string UserRole;
     private string UserId;
+    private int CartItemCount;
 
     protected override async Task OnInitializedAsync()
     {
@@ -130,5 +141,26 @@
             UserRole = user.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
             UserId = user.Claims.FirstOrDefault(c => c.Type == "UserId")?.Value;
         }
+
+        await base.OnInitializedAsync();
+
+        // Lấy số lượng sản phẩm trong giỏ hàng
+        CartItemCount = CartService.GetCartItemCount();
+
+        // Đăng ký sự kiện để cập nhật giỏ hàng khi thay đổi
+        CartService.CartChanged += OnCartChanged;
+    }
+
+    private void OnCartChanged()
+    {
+        // Cập nhật số lượng sản phẩm
+        CartItemCount = CartService.GetCartItemCount();
+        StateHasChanged(); // Cập nhật giao diện
+    }
+
+    public void Dispose()
+    {
+        // Hủy đăng ký sự kiện khi component bị hủy
+        CartService.CartChanged -= OnCartChanged;
     }
 }

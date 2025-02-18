@@ -14,7 +14,7 @@
       "executablePath": "dotnet.exe",
       "workingDirectory": "$(ProjectDir)",
       "commandLineArgs": "watch run",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "https://localhost:7001/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -23,7 +23,7 @@
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7001",
       "environmentVariables": {

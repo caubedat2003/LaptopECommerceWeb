@@ -7,7 +7,16 @@ namespace LaptopECommerceWASM.Services
         private List<CartItem> CartItems { get; set; } = new List<CartItem>();
 
         public List<CartItem> GetCartItems() => CartItems;
+        public event Action CartChanged;
 
+        private void NotifyCartChanged()
+        {
+            CartChanged?.Invoke();
+        }
+        public int GetCartItemCount()
+        {
+            return CartItems.Sum(item => item.Quantity);
+        }
         public void AddToCart(CartItem item)
         {
             var existingItem = CartItems.FirstOrDefault(x => x.LaptopId == item.LaptopId);
@@ -19,6 +28,7 @@ namespace LaptopECommerceWASM.Services
             {
                 CartItems.Add(item);
             }
+            NotifyCartChanged();
         }
 
         public void RemoveFromCart(Guid laptopId)
@@ -28,6 +38,7 @@ namespace LaptopECommerceWASM.Services
             {
                 CartItems.Remove(item);
             }
+            NotifyCartChanged();
         }
 
         public int GetTotalAmount()

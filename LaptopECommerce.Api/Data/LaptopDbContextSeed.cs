@@ -1,4 +1,4 @@
-﻿using LaptopECommerce.Api.Entities;
+using LaptopECommerce.Api.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace LaptopECommerce.Api.Data

@@ -14,6 +14,9 @@ namespace LaptopECommerce.Api
     {
         public static void Main(string[] args)
         {
+            // Load file .env lên hệ thống biến môi trường (Environment Variables)
+            DotNetEnv.Env.Load();
+
             var builder = WebApplication.CreateBuilder(args);
 
             var Configuration = builder.Configuration;
@@ -76,6 +79,16 @@ namespace LaptopECommerce.Api
 
             app.UseHttpsRedirection();
 
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            provider.Mappings[".wasm"] = "application/wasm";
+            provider.Mappings[".dat"] = "application/octet-stream";
+
+            // Cấu hình để API Server chịu đọc các file đặc thù của WebAssembly (WASM, DAT)
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
@@ -85,6 +98,8 @@ namespace LaptopECommerce.Api
             app.UseAuthorization();
 
             app.MapControllers();
+
+            app.MapFallbackToFile("index.html"); // Thêm dòng này để xử lý route cho Blazor Frontend
 
             app.Run();
         }

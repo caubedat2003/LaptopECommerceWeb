@@ -25,7 +25,8 @@ namespace LaptopECommerceWASM
             builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<CartService>();
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7001") });
+            // Thay vì fix cứng link, sử dụng luôn domain hiện tại để tránh mọi lỗi Mixed Content
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             await builder.Build().RunAsync();
         }

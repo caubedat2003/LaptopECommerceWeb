@@ -4,13 +4,17 @@
 [![Blazor](https://img.shields.io/badge/Blazor-WASM-512bd4?style=for-the-badge&logo=blazor)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=for-the-badge&logo=microsoft-sql-server)](https://www.microsoft.com/en-us/sql-server/)
 
-Một giải pháp thương mại điện tử hoàn chỉnh dành cho việc kinh doanh Laptop, được xây dựng trên nền tảng **ASP.NET Core Web API** và **Blazor WebAssembly**. Dự án hỗ trợ quy trình mua hàng khép kín, quản lý phân quyền và tích hợp hệ thống quản trị mạnh mẽ.
+Một giải pháp thương mại điện tử hoàn chỉnh dành cho việc kinh doanh Laptop, được xây dựng trên nền tảng **ASP.NET Core Web API** và **Blazor WebAssembly**. Dự án hỗ trợ quy trình mua hàng khép kín, quản lý phân quyền và tích hợp hệ thống quản trị mạnh mẽ. Link truy cập: http://laptop-ecommerce-api.runasp.net/
 
 ---
 
 ## 🌟 Tổng Quan Dự Án
 
 Dự án này là một ứng dụng web Single Page Application (SPA) hiện đại, tập trung vào trải nghiệm người dùng và tính bảo mật. Hệ thống cho phép người dùng tìm kiếm, xem chi tiết và mua laptop từ các thương hiệu hàng đầu như Apple, Dell, Asus, MSI, v.v.
+
+<img width="1890" height="938" alt="image" src="https://github.com/user-attachments/assets/13a28789-da70-450f-abe0-555050ea8101" />
+<img width="1876" height="932" alt="image" src="https://github.com/user-attachments/assets/87c91346-6454-4364-a3e9-e234aafe40a0" />
+
 
 ### Mục tiêu dự án:
 - Cung cấp giao diện mua sắm mượt mà, phản hồi nhanh.

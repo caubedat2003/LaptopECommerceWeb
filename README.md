@@ -13,8 +13,7 @@ Một giải pháp thương mại điện tử hoàn chỉnh dành cho việc ki
 Dự án này là một ứng dụng web Single Page Application (SPA) hiện đại, tập trung vào trải nghiệm người dùng và tính bảo mật. Hệ thống cho phép người dùng tìm kiếm, xem chi tiết và mua laptop từ các thương hiệu hàng đầu như Apple, Dell, Asus, MSI, v.v.
 
 <img width="1890" height="938" alt="image" src="https://github.com/user-attachments/assets/13a28789-da70-450f-abe0-555050ea8101" />
-<img width="1876" height="932" alt="image" src="https://github.com/user-attachments/assets/87c91346-6454-4364-a3e9-e234aafe40a0" />
-
+<img width="1877" height="922" alt="image" src="https://github.com/user-attachments/assets/f5468eb1-6cad-465e-b730-e0b7919fe31c" />
 
 ### Mục tiêu dự án:
 - Cung cấp giao diện mua sắm mượt mà, phản hồi nhanh.

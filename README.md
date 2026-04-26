@@ -1,48 +1,128 @@
-# Laptop E-Commerce
+# 💻 Hệ Thống Thương Mại Điện Tử Laptop (Laptop E-Commerce)
 
-A full-stack e-commerce project built with **ASP.NET Core Web API** and **Blazor WebAssembly**, featuring a complete shopping cycle, JWT authentication, and SQL Server integration.
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-512bd4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![Blazor](https://img.shields.io/badge/Blazor-WASM-512bd4?style=for-the-badge&logo=blazor)](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
+[![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=for-the-badge&logo=microsoft-sql-server)](https://www.microsoft.com/en-us/sql-server/)
 
-## Architecture
-- **Backend**: `LaptopECommerce.Api` - ASP.NET Core 8.0 Web API
-  - Handles business logic, Entity Framework Core migrations, and JWT Authentication.
-- **Frontend**: `LaptopECommerceWASM` - Blazor WebAssembly (Standalone or Hosted)
-  - Provides a single-page application (SPA) client-side experience.
-- **Models**: `LaptopECommerce.Models` - Class Library
-  - Shared DTOs and Data Models between Frontend and Backend.
+Một giải pháp thương mại điện tử hoàn chỉnh dành cho việc kinh doanh Laptop, được xây dựng trên nền tảng **ASP.NET Core Web API** và **Blazor WebAssembly**. Dự án hỗ trợ quy trình mua hàng khép kín, quản lý phân quyền và tích hợp hệ thống quản trị mạnh mẽ.
 
-## Prerequisites
-- .NET 8.0 SDK
-- SQL Server (LocalDB or Docker or Hosted DB)
-- Visual Studio 2022 (recommended) or VS Code.
+---
 
-## Setup Instructions
+## 🌟 Tổng Quan Dự Án
 
-### 1. Database Configuration
-1. Open the project folder `LaptopECommerce.Api`.
-2. Notice the `.env` file is ignored by Git. Create a `.env` file at the root of `LaptopECommerce.Api` using this template:
-    ```env
-    ConnectionStrings__DefaultConnection=Server=YOUR_SERVER; Database=YOUR_DB; User Id=YOUR_USER; Password=YOUR_PASSWORD; Encrypt=False; MultipleActiveResultSets=True;
-    JwtSecurityKey=YOUR_SUPER_SECRET_KEY_HERE
-    ```
-    *If you don't use `.env`, you can also fill these values inside `appsettings.Development.json` for local development.*
+Dự án này là một ứng dụng web Single Page Application (SPA) hiện đại, tập trung vào trải nghiệm người dùng và tính bảo mật. Hệ thống cho phép người dùng tìm kiếm, xem chi tiết và mua laptop từ các thương hiệu hàng đầu như Apple, Dell, Asus, MSI, v.v.
 
-### 2. Run the Application locally
-- **Backend**: `cd LaptopECommerce.Api && dotnet run`
-  - The API will auto-seed standard dummy data if your DB is empty.
-- **Frontend**: `cd LaptopECommerceWASM && dotnet run`
-  - Make sure `Program.cs` in WASM properly points to your running localhost API port or use the `builder.HostEnvironment.BaseAddress` approach when testing the hosted environment.
+### Mục tiêu dự án:
+- Cung cấp giao diện mua sắm mượt mà, phản hồi nhanh.
+- Quản lý kho hàng và đơn hàng hiệu quả cho quản trị viên.
+- Hệ thống thanh toán và theo dõi trạng thái đơn hàng thời gian thực.
+- Phân quyền người dùng rõ ràng (Khách hàng, Thủ kho, Shipper, Admin).
 
-### 3. Production Deployment (MonsterASP.net / IIS)
-This project is configured optimally for a **Hosted Blazor WebAssembly** deployment model.
-1. Publish `LaptopECommerce.Api`.
-2. Publish `LaptopECommerceWASM`.
-3. Upload the API `publish` contents to the root of your web environment (e.g. `/wwwroot` on MonsterASP).
-4. Do not include `web.config` inside the nested frontend folder.
-5. Upload the WASM `wwwroot` contents into an inner `wwwroot` folder that sits alongside your API `.dll`.
-6. Configure the `appsettings.json` on the server using your production secrets or supply a production `.env` file.
+---
 
-## Features
-- Scalable structured solution separating Models, API, and UI.
-- Secure Authentication using JWT tokens.
-- Automatic database migrations and data seeding techniques natively integrated.
-- Polished, responsive e-commerce web interface.
+## 🚀 Công Nghệ Sử Dụng
+
+### Backend (LaptopECommerce.Api)
+- **Framework**: `ASP.NET Core 8.0 Web API`
+- **ORM**: `Entity Framework Core`
+- **Database**: `SQL Server` (Hỗ trợ cả Raw SQL Procedures và Migrations)
+- **Security**: `JWT Authentication` & `Role-base Authorization`
+- **Thư viện bổ trợ**: `Polly` (xử lý lỗi và khả năng phục hồi), `DotNetEnv` (quản lý biến môi trường).
+- **Khác**: Dependency Injection, Middleware, Swagger UI.
+
+### Frontend (LaptopECommerceWASM)
+- **Framework**: `Blazor WebAssembly (WASM)`
+- **Styling**: `Bootstrap` & `Custom CSS`
+- **Thư viện UI**: `Blazored.Toast` (thông báo), `Blazored.LocalStorage` (lưu trữ cục bộ).
+- **Security**: Custom `AuthenticationStateProvider`.
+
+### Models (LaptopECommerce.Models)
+- Thư viện lớp chung (Class Library) chứa các `DTOs`, `Entities` và `View Models` dùng chung cho cả Client và Server.
+
+---
+
+## ✨ Chức Năng Chính
+
+### 🛒 Đối với Khách Hàng (User)
+- **Trang chủ**: Hiển thị sản phẩm nổi bật, banner khuyến mãi.
+- **Xem theo thương hiệu**: Lọc sản phẩm theo Apple, Asus, Dell, MSI, Samsung, Acer, Lenovo.
+- **Tìm kiếm**: Tìm kiếm laptop theo tên và thông số.
+- **Giỏ hàng**: Thêm/Xóa sản phẩm, cập nhật số lượng trực tiếp.
+- **Thanh toán**: Quy trình đặt hàng, nhập địa chỉ và xác nhận đơn hàng.
+- **Quản lý tài khoản**: Xem Profile, đổi mật khẩu, lịch sử đơn hàng.
+
+### 🛠️ Đối với Quản Trị Viên (Admin)
+- **Quản lý Sản phẩm**: Thêm mới, chỉnh sửa thông tin cấu hình, hình ảnh laptop.
+- **Quản lý Người dùng**: Danh sách thành viên, cấp quyền, khóa/mở tài khoản.
+- **Quản lý Đơn hàng**: Theo dõi danh sách đơn hàng, phê duyệt, gán shipper.
+- **Trạng thái đơn hàng**: Cập nhật quy trình từ Đang xử lý -> Đang giao -> Hoàn thành.
+
+### 🚚 Đối với Người Giao Hàng (Shipper)
+- **Danh sách giao hàng**: Xem các đơn hàng được gán cho bản thân.
+- **Cập nhật trạng thái**: Đánh dấu đã giao hàng thành công hoặc thất bại.
+
+---
+
+## 📂 Cấu Trúc Thư Mục
+
+```text
+LaptopECommerceWeb/
+├── LaptopECommerce.Api/       # Dự án Backend Web API
+│   ├── Controller/            # Xử lý các API Endpoints
+│   ├── Data/                  # DbContext và cấu hình Database
+│   ├── Entities/              # Các thực thể dữ liệu
+│   └── Migrations/            # Lịch sử thay đổi Schema Database
+├── LaptopECommerceWASM/       # Dự án Frontend Blazor WASM
+│   ├── Pages/                 # Giao diện người dùng (User, Admin, Shipper, Brand)
+│   ├── Shared/                # Các Component dùng chung (NavMenu, Layout)
+│   └── wwwroot/               # Static assets (CSS, JS, Images)
+├── LaptopECommerce.Models/    # Thư viện chứa Models & DTOs
+├── db_laptop_ecommerce_clean.sql # File script khởi tạo database
+└── README.md                  # Tài liệu hướng dẫn (File này)
+```
+
+---
+
+## 🛠️ Cài Đặt & Chạy Dự Án
+
+### 1. Cấu hình Cơ sở dữ liệu
+1. Tạo một database mới trên SQL Server.
+2. Chạy file script `db_laptop_ecommerce_clean.sql` để tạo bảng và dữ liệu mẫu.
+3. Trong thư mục `LaptopECommerce.Api`, tạo file `.env` hoặc chỉnh sửa `appsettings.json`:
+   ```env
+   ConnectionStrings__DefaultConnection=Server=YOUR_SERVER; Database=LaptopDB; Integrated Security=True; TrustServerCertificate=True;
+   JwtSecurityKey=Your_Super_Secret_Key_At_Least_32_Chars
+   ```
+
+### 2. Chạy API (Backend)
+```bash
+cd LaptopECommerce.Api
+dotnet run
+```
+
+### 3. Chạy Client (Frontend)
+```bash
+cd LaptopECommerceWASM
+dotnet run
+```
+
+---
+
+## 🌍 Triển Khai (Deployment)
+
+Dự án hiện được cấu hình để triển khai tốt nhất trên **MonsterASP.net**:
+- Cài đặt Frontend WASM bên trong thư mục `wwwroot` của Backend API.
+- Cấu hình tệp `web.config` để hỗ trợ ASP.NET Core và Routing của Blazor.
+- Truy cập API thông qua HTTPS ổn định.
+
+---
+
+## 📬 Liên Hệ
+
+Nếu bạn có bất kỳ câu hỏi nào về dự án, vui lòng liên hệ:
+- **Tác giả**: [Tên của bạn]
+- **Email**: [Email của bạn]
+- **GitHub**: [Link GitHub của bạn]
+
+---
+*Dự án thực hiện nhằm mục đích học tập và xây dựng ứng dụng thực tế với .NET 8.*

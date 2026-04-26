@@ -120,9 +120,9 @@ Dự án hiện được cấu hình để triển khai tốt nhất trên **Mon
 ## 📬 Liên Hệ
 
 Nếu bạn có bất kỳ câu hỏi nào về dự án, vui lòng liên hệ:
-- **Tác giả**: [Tên của bạn]
-- **Email**: [Email của bạn]
-- **GitHub**: [Link GitHub của bạn]
+- **Tác giả**: Anh Đạt
+- **Email**: anh23dat.truong@gmail.com
+- **GitHub**: [(https://github.com/caubedat2003)]
 
 ---
 *Dự án thực hiện nhằm mục đích học tập và xây dựng ứng dụng thực tế với .NET 8.*

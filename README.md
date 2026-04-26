@@ -12,10 +12,10 @@ Một giải pháp thương mại điện tử hoàn chỉnh dành cho việc ki
 
 Dự án này là một ứng dụng web Single Page Application (SPA) hiện đại, tập trung vào trải nghiệm người dùng và tính bảo mật. Hệ thống cho phép người dùng tìm kiếm, xem chi tiết và mua laptop từ các thương hiệu hàng đầu như Apple, Dell, Asus, MSI, v.v.
 
-<img width="1890" height="938" alt="image" src="https://github.com/user-attachments/assets/13a28789-da70-450f-abe0-555050ea8101" />
-<img width="1877" height="922" alt="image" src="https://github.com/user-attachments/assets/f5468eb1-6cad-465e-b730-e0b7919fe31c" />
+<img src="./LaptopECommerceWASM/wwwroot/image/screencapture-laptop-ecommerce-api-runasp-net-2026-04-27-03_05_45.png" alt="Homepage Screenshot 1" />
 
 ### Mục tiêu dự án:
+
 - Cung cấp giao diện mua sắm mượt mà, phản hồi nhanh.
 - Quản lý kho hàng và đơn hàng hiệu quả cho quản trị viên.
 - Hệ thống thanh toán và theo dõi trạng thái đơn hàng thời gian thực.
@@ -26,6 +26,7 @@ Dự án này là một ứng dụng web Single Page Application (SPA) hiện đ
 ## 🚀 Công Nghệ Sử Dụng
 
 ### Backend (LaptopECommerce.Api)
+
 - **Framework**: `ASP.NET Core 8.0 Web API`
 - **ORM**: `Entity Framework Core`
 - **Database**: `SQL Server` (Hỗ trợ cả Raw SQL Procedures và Migrations)
@@ -34,12 +35,14 @@ Dự án này là một ứng dụng web Single Page Application (SPA) hiện đ
 - **Khác**: Dependency Injection, Middleware, Swagger UI.
 
 ### Frontend (LaptopECommerceWASM)
+
 - **Framework**: `Blazor WebAssembly (WASM)`
 - **Styling**: `Bootstrap` & `Custom CSS`
 - **Thư viện UI**: `Blazored.Toast` (thông báo), `Blazored.LocalStorage` (lưu trữ cục bộ).
 - **Security**: Custom `AuthenticationStateProvider`.
 
 ### Models (LaptopECommerce.Models)
+
 - Thư viện lớp chung (Class Library) chứa các `DTOs`, `Entities` và `View Models` dùng chung cho cả Client và Server.
 
 ---
@@ -47,6 +50,7 @@ Dự án này là một ứng dụng web Single Page Application (SPA) hiện đ
 ## ✨ Chức Năng Chính
 
 ### 🛒 Đối với Khách Hàng (User)
+
 - **Trang chủ**: Hiển thị sản phẩm nổi bật, banner khuyến mãi.
 - **Xem theo thương hiệu**: Lọc sản phẩm theo Apple, Asus, Dell, MSI, Samsung, Acer, Lenovo.
 - **Tìm kiếm**: Tìm kiếm laptop theo tên và thông số.
@@ -55,12 +59,14 @@ Dự án này là một ứng dụng web Single Page Application (SPA) hiện đ
 - **Quản lý tài khoản**: Xem Profile, đổi mật khẩu, lịch sử đơn hàng.
 
 ### 🛠️ Đối với Quản Trị Viên (Admin)
+
 - **Quản lý Sản phẩm**: Thêm mới, chỉnh sửa thông tin cấu hình, hình ảnh laptop.
 - **Quản lý Người dùng**: Danh sách thành viên, cấp quyền, khóa/mở tài khoản.
 - **Quản lý Đơn hàng**: Theo dõi danh sách đơn hàng, phê duyệt, gán shipper.
 - **Trạng thái đơn hàng**: Cập nhật quy trình từ Đang xử lý -> Đang giao -> Hoàn thành.
 
 ### 🚚 Đối với Người Giao Hàng (Shipper)
+
 - **Danh sách giao hàng**: Xem các đơn hàng được gán cho bản thân.
 - **Cập nhật trạng thái**: Đánh dấu đã giao hàng thành công hoặc thất bại.
 
@@ -89,6 +95,7 @@ LaptopECommerceWeb/
 ## 🛠️ Cài Đặt & Chạy Dự Án
 
 ### 1. Cấu hình Cơ sở dữ liệu
+
 1. Tạo một database mới trên SQL Server.
 2. Chạy file script `db_laptop_ecommerce_clean.sql` để tạo bảng và dữ liệu mẫu.
 3. Trong thư mục `LaptopECommerce.Api`, tạo file `.env` hoặc chỉnh sửa `appsettings.json`:
@@ -98,12 +105,14 @@ LaptopECommerceWeb/
    ```
 
 ### 2. Chạy API (Backend)
+
 ```bash
 cd LaptopECommerce.Api
 dotnet run
 ```
 
 ### 3. Chạy Client (Frontend)
+
 ```bash
 cd LaptopECommerceWASM
 dotnet run
@@ -114,6 +123,7 @@ dotnet run
 ## 🌍 Triển Khai (Deployment)
 
 Dự án hiện được cấu hình để triển khai tốt nhất trên **MonsterASP.net**:
+
 - Cài đặt Frontend WASM bên trong thư mục `wwwroot` của Backend API.
 - Cấu hình tệp `web.config` để hỗ trợ ASP.NET Core và Routing của Blazor.
 - Truy cập API thông qua HTTPS ổn định.
@@ -123,9 +133,11 @@ Dự án hiện được cấu hình để triển khai tốt nhất trên **Mon
 ## 📬 Liên Hệ
 
 Nếu bạn có bất kỳ câu hỏi nào về dự án, vui lòng liên hệ:
+
 - **Tác giả**: Anh Đạt
 - **Email**: anh23dat.truong@gmail.com
-- **GitHub**: [(https://github.com/caubedat2003)]
+- **GitHub**: https://github.com/caubedat2003
 
 ---
-*Dự án thực hiện nhằm mục đích học tập và xây dựng ứng dụng thực tế với .NET 8.*
+
+_Dự án thực hiện nhằm mục đích học tập và xây dựng ứng dụng thực tế với .NET 8._
